@@ -27,15 +27,10 @@ I would like a diagram to explain all the links and a checklist of best order of
 ### Lorna N [1:05 PM]
 I think what would have helped me would have been to build on the *same* example each day, with extensions.  So use countries for all of them…  What do you think?
 
-### Olga [1:06 PM]
-yes prob would have better
-I don’t see the point us still talking about yesterday’s lab and reading over the code.
 
 ### Lorna N [1:09 PM]
 Unless it is to be sure that we understand what is where, and why, and what it is supposed to be doing…
 
-### Olga [1:09 PM]
-I wish there would give us the notes about group project management etc to read over
 
 ### Lorna N [1:10 PM]
 I know.  It is frustrating feeling that we have to work something out when there is potentially a better way out there.
@@ -66,8 +61,6 @@ oh dear !
 ### Max [1:39 PM]
 I’m a little lost as to the groups, was it just a discussion of the project from yesterday?
 
-### Olga [1:40 PM]
-yes they seem to be dragging it out a bit.. it’s been a slow morning !
 
 ### Lorna N [1:41 PM]
 oepsie! I’m going to be popping in and out this afternoon as I’m single-parenting.
