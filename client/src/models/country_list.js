@@ -18,17 +18,8 @@ CountryList.prototype.populate = function(){
     request.send(null);
 }
 
-// CountryList.prototype.addCountry = function(country){
-//     this.countries.push(country);
-//     this.onUpdate(this.countries);
-//     //persist
-//     const request = new XMLHttpRequest();
-//     request.open("POST", this.url);
-//     request.setRequestHeader("Content-Type", "application/json");
-//     request.onload = function() {
-//       if(request.status === 200) {
-//       }
-//     };
-//     request.send( JSON.stringify( {country: country} ) );
-// }
+CountryList.prototype.filterCountries = function(countries){
+
+}
+
 module.exports = CountryList;
