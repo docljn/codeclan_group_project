@@ -76,8 +76,116 @@
   !*** ./client/src/app.js ***!
   \***************************/
 /*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+const CountriesSelectView = __webpack_require__(/*! ./views/countries_select_view */ "./client/src/views/countries_select_view.js");
+
+const CountryList = __webpack_require__(/*! ./models/country_list */ "./client/src/models/country_list.js");
+
+
+const app = function(){
+  const countriesSelectView = new CountriesSelectView(document.querySelector('#countries'));
+  const world = new CountryList('https://restcountries.eu/rest/v1');
+
+  world.onUpdate = function(countries) {
+    countriesSelectView.render(countries);
+  };
+
+  world.populate();
+
+
+}
+
+document.addEventListener("DOMContentLoaded", app)
+
+
+/***/ }),
+
+/***/ "./client/src/models/country_list.js":
+/*!*******************************************!*\
+  !*** ./client/src/models/country_list.js ***!
+  \*******************************************/
+/*! no static exports found */
 /***/ (function(module, exports) {
 
+const CountryList = function(url) {
+  this.countries = [];
+  this.onUpdate = null;
+  this.url = url;
+};
+
+CountryList.prototype.populate = function(){
+    const request = new XMLHttpRequest();
+    request.open("GET", this.url);
+    request.onload = function() {
+        if (request.status === 200) {
+            const jsonString = request.responseText;
+            const countries = JSON.parse(jsonString);
+            this.countries = countries;
+            this.onUpdate(countries);
+        }
+    }.bind(this);
+    request.send(null);
+}
+
+// CountryList.prototype.addCountry = function(country){
+//     this.countries.push(country);
+//     this.onUpdate(this.countries);
+//     //persist
+//     const request = new XMLHttpRequest();
+//     request.open("POST", this.url);
+//     request.setRequestHeader("Content-Type", "application/json");
+//     request.onload = function() {
+//       if(request.status === 200) {
+//       }
+//     };
+//     request.send( JSON.stringify( {country: country} ) );
+// }
+module.exports = CountryList;
+
+
+/***/ }),
+
+/***/ "./client/src/views/countries_select_view.js":
+/*!***************************************************!*\
+  !*** ./client/src/views/countries_select_view.js ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+const CountrySelectView = function(selectElement) {
+  this.selectElement = selectElement;
+  this.onChange = undefined;
+  this.countries = [];
+  this.selectElement.addEventListener('change', function (e) {
+      const target = e.target;
+      const index = target.selectedIndex;
+      const country = this.countries[index];
+      this.onChange(country);
+  }.bind(this), false);
+};
+
+CountrySelectView.prototype.render = function(countries){
+    this.selectElement.innerHTML = "";
+    this.countries = countries;
+    this.countries.forEach(function(country, index) {
+      country.index = index;
+      this.addOption(country, index);
+    }.bind(this));
+}
+
+CountrySelectView.prototype.addOption = function(country, index){
+    const option = document.createElement("option");
+    option.value = index;
+    option.text = country.name;
+    this.selectElement.appendChild(option);
+}
+
+CountrySelectView.prototype.setSelectedIndex = function(index){
+    this.selectElement.selectedIndex = index;
+}
+
+module.exports = CountrySelectView;
 
 
 /***/ })
