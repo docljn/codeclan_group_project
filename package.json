@@ -1,0 +1,31 @@
+{
+  "name": "codeclan_group_project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js",
+    "webpack": "webpack -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/docljn/codeclan_group_project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/docljn/codeclan_group_project/issues"
+  },
+  "homepage": "https://github.com/docljn/codeclan_group_project#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "mongodb": "^3.0.3"
+  },
+  "devDependencies": {
+    "webpack-cli": "^2.0.10",
+    "webpack": "^4.0.1",
+    "mocha": "^5.0.1"
+  }
+}
