@@ -194,7 +194,8 @@ promise.then(function(result) {
 **Will I get my new phone?**
 In code, we consume the phone promise like this:
 1. askMom() consumes the promise willIgetNewPhone
-2. this version uses .catch to handle errors and I don't know why **ASK ZSOLT**
+2. this version uses .catch to handle errors and I don't know why
+
 ```javascript
 const askMom = function () {
     willIGetNewPhone
@@ -209,7 +210,6 @@ const askMom = function () {
          // output: 'mom is not happy'
         });
 };
-
 askMom();
 ```
 
