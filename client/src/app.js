@@ -15,10 +15,9 @@ const app = function(){
 
   countriesSelectView.onChange = function(country){
     console.log(country);
-    const dummyPhrase = "Hello";
+    const phrase = phraseList[0];
     const languageToTranslateTo = country.languages[0].iso639_1;
-    console.log(dummyPhrase);
-    console.log(languageToTranslateTo);
+    console.log(phrase);
   }
 }
 
