@@ -1,5 +1,4 @@
 const CountriesSelectView = require('./views/countries_select_view');
-
 const CountryList = require('./models/country_list');
 
 
@@ -16,6 +15,7 @@ const app = function(){
   countriesSelectView.onChange = function(country){
     console.log(country);
   }
+
 
 
 }

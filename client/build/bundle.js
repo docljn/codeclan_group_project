@@ -79,7 +79,6 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 const CountriesSelectView = __webpack_require__(/*! ./views/countries_select_view */ "./client/src/views/countries_select_view.js");
-
 const CountryList = __webpack_require__(/*! ./models/country_list */ "./client/src/models/country_list.js");
 
 
@@ -96,6 +95,7 @@ const app = function(){
   countriesSelectView.onChange = function(country){
     console.log(country);
   }
+
 
 
 }
