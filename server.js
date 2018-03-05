@@ -33,39 +33,34 @@ app.post('/translate_api/', function (req, expressResponse) {
 
   const languageToTranslateTo = req.body.language;
 
-  let translatedPhrases = [];
-
-  const promises = phraseList.map(function(phraseToTranslate){
-
-    const response = translate(phraseToTranslate, {to: languageToTranslateTo});
-    console.log(response.text);
-    return response.text;
+  const promises = phraseList.map( function (phraseToTranslate) {
+    return translate(phraseToTranslate, {to: languageToTranslateTo});
   });
 
-  console.log("promises", promises);
+  console.log('promises', promises);
 
   Promise.all(promises)
-  .then(function(){
+    // values is the array which results from the promises being fulfilled
+    .then( function (values) {
+      // it's fine up to here....
+      console.log(values);
+      const phrases = values.map( function (value) {
+        return value.text;
+      });
+      const jsonString = JSON.stringify(phrases);
+      expressResponse.json({data: phrases});
 
-    const jsonString = JSON.stringify(promises);
-    expressResponse.json({data: jsonString});
-  
-  })
+    })
+    .catch(err => {
+      console.error('console error', err);
+    });
 
-  .catch(err => {
-    console.error('console error', err);
-  });
 
-    // .then((translateResponse) => {
-    //   const phrase = translateResponse.text;
-    //   return phrase;
-    //
-    // })
 
 
 });
 
-
+// THIS IS WHAT WE USED FOR A SINGLE PHRASE TRANSLATION REQUEST
 // app.post('/translate_api/', function (req, expressResponse) {
 //   const phraseToTranslate = req.body.phrase;
 //   const languageToTranslateTo = req.body.language;

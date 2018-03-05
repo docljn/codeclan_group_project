@@ -80,7 +80,7 @@
 
 const CountriesSelectView = __webpack_require__(/*! ./views/countries_select_view */ "./client/src/views/countries_select_view.js");
 const CountryList = __webpack_require__(/*! ./models/country_list */ "./client/src/models/country_list.js");
-const phraseList = __webpack_require__(/*! ./models/phrase_list */ "./client/src/models/phrase_list.js");
+// const phraseList = require('./models/phrase_list');
 
 
 const app = function(){
@@ -102,35 +102,26 @@ const app = function(){
 
     request.open('POST', '/translate_api/');
 
-    request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
 
     request.onload = requestComplete;
 
     // const requestBody = {phrase: phraseToTranslate, language: languageToTranslateTo}
     const requestBody = {language: languageToTranslateTo};
-    console.log("request body", requestBody);
-    request.send(JSON.stringify(requestBody))
-
-
-    // phraseList.forEach(function(phraseToTranslate){
-    //
-    //
-    //
-    // });
-
-  }
-}
+    console.log('request body', requestBody);
+    request.send(JSON.stringify(requestBody));
+  };
+};
 
 
 const requestComplete = function(){
   if(this.status !== 200) return;
   const jsonString = this.responseText;
-  const translatedPhrase = JSON.parse(jsonString);
-  console.log('output of requestComplete', translatedPhrase);
+  const translatedPhraseArray = JSON.parse(jsonString);
+  console.log('output of requestComplete', translatedPhraseArray);
+};
 
-}
-
-document.addEventListener("DOMContentLoaded", app)
+document.addEventListener('DOMContentLoaded', app);
 
 
 /***/ }),
@@ -173,21 +164,6 @@ CountryList.prototype.populate = function(){
 };
 
 module.exports = CountryList;
-
-
-/***/ }),
-
-/***/ "./client/src/models/phrase_list.js":
-/*!******************************************!*\
-  !*** ./client/src/models/phrase_list.js ***!
-  \******************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-const phraseList = ["Hello", "Goodbye", "Please"];
-
-
-module.exports = phraseList;
 
 
 /***/ }),

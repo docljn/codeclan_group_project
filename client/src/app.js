@@ -1,6 +1,6 @@
 const CountriesSelectView = require('./views/countries_select_view');
 const CountryList = require('./models/country_list');
-const phraseList = require('./models/phrase_list');
+// const phraseList = require('./models/phrase_list');
 
 
 const app = function(){
@@ -22,32 +22,23 @@ const app = function(){
 
     request.open('POST', '/translate_api/');
 
-    request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
 
     request.onload = requestComplete;
 
     // const requestBody = {phrase: phraseToTranslate, language: languageToTranslateTo}
     const requestBody = {language: languageToTranslateTo};
-    console.log("request body", requestBody);
-    request.send(JSON.stringify(requestBody))
-
-
-    // phraseList.forEach(function(phraseToTranslate){
-    //
-    //
-    //
-    // });
-
-  }
-}
+    console.log('request body', requestBody);
+    request.send(JSON.stringify(requestBody));
+  };
+};
 
 
 const requestComplete = function(){
   if(this.status !== 200) return;
   const jsonString = this.responseText;
-  const translatedPhrase = JSON.parse(jsonString);
-  console.log('output of requestComplete', translatedPhrase);
+  const translatedPhraseArray = JSON.parse(jsonString);
+  console.log('output of requestComplete', translatedPhraseArray);
+};
 
-}
-
-document.addEventListener("DOMContentLoaded", app)
+document.addEventListener('DOMContentLoaded', app);
