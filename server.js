@@ -2,13 +2,12 @@ const express = require('express');
 const app = express();
 const translate = require('google-translate-api');
 const languageCodes = require('./client/src/resources/language_codes');
-// const phrase_list = require('./phrase_list');
-
-let aWord = '';
-const path = require('path');
 const bodyParser = require('body-parser');
+const path = require('path');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+
+let aWord = '';
 
 
 app.get('/', function (req, res) {
@@ -30,13 +29,14 @@ app.get('/translate_api', function(req, res){
 });
 
 
-app.get('/translate_api/:language', function (req, res) {
-  console.log(req.params.language);
-  translate('Hello', {to: req.params.language}).then(translateRes => {
-    console.log(translateRes.text);
-    aWord = translateRes.text;
-    res.json({data: aWord});
-    console.log(res.from.language.iso);
+app.post('/translate_api/', function (req, expressResponse) {
+  const phraseToTranslate = req.body.phrase;
+  const languageToTranslateTo = req.body.language;
+  translate(phraseToTranslate, {to: languageToTranslateTo}).then(translateResponse => {
+    console.log(translateResponse.text);
+    aWord = translateResponse.text;
+    expressResponse.json({data: aWord});
+    console.log(translateResponse.from.language.iso);
 
   }).catch(err => {
     console.error('console error', err);
