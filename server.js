@@ -30,6 +30,19 @@ app.get('/translate_api', function(req, res){
 });
 
 
+app.get('/translate_api/:language', function (req, res) {
+  console.log(req.params.language);
+  translate('Hello', {to: req.params.language}).then(translateRes => {
+    console.log(translateRes.text);
+    aWord = translateRes.text;
+    res.json({data: aWord});
+    console.log(res.from.language.iso);
+
+  }).catch(err => {
+    console.error('console error', err);
+  });
+});
+
 
 /*
 const translatePhrase = function(phraseToTranslate, language){
