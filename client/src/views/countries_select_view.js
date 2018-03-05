@@ -11,9 +11,9 @@ const CountrySelectView = function(selectElement) {
   }.bind(this), false);
 };
 
-CountrySelectView.prototype.render = function(countries){
-  this.selectElement.innerHTML = "";
-  this.countries = countries;
+CountrySelectView.prototype.render = function(filteredCountries){
+  // this.selectElement.innerHTML = "";
+  this.countries = filteredCountries;
   this.countries.forEach(function(country, index) {
     country.index = index;
     this.addOption(country, index);
