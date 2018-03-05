@@ -1,4 +1,4 @@
-const phraseList = ["Hello"];
+const phraseList = ["Hello", "Goodbye", "Please"];
 
 
 module.exports = phraseList;

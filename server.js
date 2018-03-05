@@ -4,6 +4,7 @@ const translate = require('google-translate-api');
 const languageCodes = require('./client/src/resources/language_codes');
 const bodyParser = require('body-parser');
 const path = require('path');
+const phraseList = require('./client/src/models/phrase_list');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -14,34 +15,71 @@ app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname + '/client/build/index.html'));
 });
 
-app.get('/translate_api', function(req, res){
-  // proof of concept: we can call the api
-  translate('I love Moscow', {to: languageCodes[0]}).then(translateRes => {
-    console.log(translateRes.text);
-    aWord = translateRes.text;
-    res.json({data: aWord});
-    console.log(res.from.language.iso);
-
-  }).catch(err => {
-    console.error('console error', err);
-  });
-
-});
-
+// app.get('/translate_api', function(req, res){
+//   // proof of concept: we can call the api
+//   translate('I love Moscow', {to: languageCodes[0]}).then(translateRes => {
+//     console.log(translateRes.text);
+//     aWord = translateRes.text;
+//     res.json({data: aWord});
+//     console.log(res.from.language.iso);
+//
+//   }).catch(err => {
+//     console.error('console error', err);
+//   });
+//
+// });
 
 app.post('/translate_api/', function (req, expressResponse) {
-  const phraseToTranslate = req.body.phrase;
-  const languageToTranslateTo = req.body.language;
-  translate(phraseToTranslate, {to: languageToTranslateTo}).then(translateResponse => {
-    console.log(translateResponse.text);
-    aWord = translateResponse.text;
-    expressResponse.json({data: aWord});
-    console.log(translateResponse.from.language.iso);
 
-  }).catch(err => {
+  const languageToTranslateTo = req.body.language;
+
+  let translatedPhrases = [];
+
+  const promises = phraseList.map(function(phraseToTranslate){
+
+    const response = translate(phraseToTranslate, {to: languageToTranslateTo});
+    console.log(response.text);
+    return response.text;
+  });
+
+  console.log("promises", promises);
+
+  Promise.all(promises)
+  .then(function(){
+
+    const jsonString = JSON.stringify(promises);
+    expressResponse.json({data: jsonString});
+  
+  })
+
+  .catch(err => {
     console.error('console error', err);
   });
+
+    // .then((translateResponse) => {
+    //   const phrase = translateResponse.text;
+    //   return phrase;
+    //
+    // })
+
+
 });
+
+
+// app.post('/translate_api/', function (req, expressResponse) {
+//   const phraseToTranslate = req.body.phrase;
+//   const languageToTranslateTo = req.body.language;
+//
+//   translate(phraseToTranslate, {to: languageToTranslateTo}).then(translateResponse => {
+//     console.log(translateResponse.text);
+//     aWord = translateResponse.text;
+//     expressResponse.json({data: aWord});
+//     console.log(translateResponse.from.language.iso);
+//
+//   }).catch(err => {
+//     console.error('console error', err);
+//   });
+// });
 
 
 /*
@@ -50,7 +88,7 @@ const translatePhrase = function(phraseToTranslate, language){
 console.log(phraseToTranslate, language);
 
 translate (phraseToTranslate, {to: language}).then(res =>{
-  console.log(res.text);
+console.log(res.text);
 })
 // }*/
 

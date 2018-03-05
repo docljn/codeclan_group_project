@@ -95,10 +95,8 @@ const app = function(){
 
   countriesSelectView.onChange = function(country){
 
-    const phraseToTranslate = phraseList[0];
+    // const phraseToTranslate = phraseList[0];
     const languageToTranslateTo = country.languages[0].iso639_1;
-
-    const requestBody = {phrase: phraseToTranslate, language: languageToTranslateTo}
 
     const request = new XMLHttpRequest();
 
@@ -108,10 +106,21 @@ const app = function(){
 
     request.onload = requestComplete;
 
+    // const requestBody = {phrase: phraseToTranslate, language: languageToTranslateTo}
+    const requestBody = {language: languageToTranslateTo};
+    console.log("request body", requestBody);
     request.send(JSON.stringify(requestBody))
+
+
+    // phraseList.forEach(function(phraseToTranslate){
+    //
+    //
+    //
+    // });
 
   }
 }
+
 
 const requestComplete = function(){
   if(this.status !== 200) return;
@@ -175,7 +184,7 @@ module.exports = CountryList;
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-const phraseList = ["Hello"];
+const phraseList = ["Hello", "Goodbye", "Please"];
 
 
 module.exports = phraseList;
