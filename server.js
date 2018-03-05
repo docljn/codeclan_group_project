@@ -1,14 +1,14 @@
 const express = require('express');
 const app = express();
 const translate = require('google-translate-api');
-const languageCodes = require('./client/src/resources/language_codes');
+// const languageCodes = require('./client/src/resources/language_codes');
 const bodyParser = require('body-parser');
 const path = require('path');
 const phraseList = require('./client/src/models/phrase_list');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-let aWord = '';
+// let aWord = '';
 
 
 app.get('/', function (req, res) {
@@ -47,7 +47,7 @@ app.post('/translate_api/', function (req, expressResponse) {
       const phrases = values.map( function (value) {
         return value.text;
       });
-      const jsonString = JSON.stringify(phrases);
+      // const jsonString = JSON.stringify(phrases);
       expressResponse.json({data: phrases});
 
     })
