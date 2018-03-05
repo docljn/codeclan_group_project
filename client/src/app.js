@@ -14,11 +14,31 @@ const app = function(){
   world.populate();
 
   countriesSelectView.onChange = function(country){
-    console.log(country);
-    const phrase = phraseList[0];
+
+    const phraseToTranslate = phraseList[0];
     const languageToTranslateTo = country.languages[0].iso639_1;
-    console.log(phrase);
+
+    const requestBody = {phrase: phraseToTranslate, language: languageToTranslateTo}
+
+    const request = new XMLHttpRequest();
+
+    request.open('POST', '/translate_api/');
+
+    request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+    request.onload = requestComplete;
+
+    request.send(JSON.stringify(requestBody))
+
   }
+}
+
+const requestComplete = function(){
+  if(this.status !== 200) return;
+  const jsonString = this.responseText;
+  const translatedPhrase = JSON.parse(jsonString);
+  console.log('output of requestComplete', translatedPhrase);
+
 }
 
 document.addEventListener("DOMContentLoaded", app)
