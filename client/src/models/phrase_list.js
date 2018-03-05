@@ -1,4 +1,4 @@
-const hello = "Hello";
+const phraseList = ["Hello"];
 
 
-module.exports = phrase_list;
+module.exports = phraseList;

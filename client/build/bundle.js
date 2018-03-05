@@ -80,6 +80,7 @@
 
 const CountriesSelectView = __webpack_require__(/*! ./views/countries_select_view */ "./client/src/views/countries_select_view.js");
 const CountryList = __webpack_require__(/*! ./models/country_list */ "./client/src/models/country_list.js");
+const phraseList = __webpack_require__(/*! ./models/phrase_list */ "./client/src/models/phrase_list.js");
 
 
 const app = function(){
@@ -94,10 +95,11 @@ const app = function(){
 
   countriesSelectView.onChange = function(country){
     console.log(country);
+    const dummyPhrase = "Hello";
+    const languageToTranslateTo = country.languages[0].iso639_1;
+    console.log(dummyPhrase);
+    console.log(languageToTranslateTo);
   }
-
-
-
 }
 
 document.addEventListener("DOMContentLoaded", app)
@@ -112,7 +114,7 @@ document.addEventListener("DOMContentLoaded", app)
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-const languageCodes = __webpack_require__ (!(function webpackMissingModule() { var e = new Error("Cannot find module \"../resources/languageCodes\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+const languageCodes = __webpack_require__ (/*! ../resources/language_codes */ "./client/src/resources/language_codes.js");
 
 const CountryList = function(url) {
   this.countries = [];
@@ -143,6 +145,35 @@ CountryList.prototype.populate = function(){
 };
 
 module.exports = CountryList;
+
+
+/***/ }),
+
+/***/ "./client/src/models/phrase_list.js":
+/*!******************************************!*\
+  !*** ./client/src/models/phrase_list.js ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+const phraseList = ["Hello"];
+
+
+module.exports = phraseList;
+
+
+/***/ }),
+
+/***/ "./client/src/resources/language_codes.js":
+/*!************************************************!*\
+  !*** ./client/src/resources/language_codes.js ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+const languageCodes = [ 'af', 'sq', 'am', 'ar', 'hy', 'az', 'eu', 'be', 'bn', 'bs', 'bg', 'ca', 'zh', 'co', 'hr', 'cs', 'da', 'nl', 'en', 'eo', 'et', 'fi', 'fr', 'fy', 'gl', 'ka', 'de', 'el', 'gu', 'ht', 'ha', 'haw', 'iw', 'hi', 'hmn', 'hu', 'is', 'ig', 'id', 'ga', 'it', 'ja', 'jw', 'kn', 'kk', 'km', 'ko', 'ku', 'ky', 'lo', 'la', 'lv', 'lt', 'lb', 'mk', 'mg', 'ms', 'ml', 'mt', 'mi', 'mr', 'mn', 'my', 'ne', 'no', 'ny', 'ps', 'fa', 'pl', 'pt', 'pa', 'ro', 'ru', 'sm', 'gd', 'sr', 'st', 'sn','sd','si', 'sk', 'sl', 'so', 'es', 'su', 'sw', 'sv', 'tl', 'tg', 'ta', 'te', 'th', 'tr', 'uk', 'ur', 'uz', 'vi', 'cy', 'xh', 'yi', 'yo', 'zu'];
+
+module.exports = languageCodes;
 
 
 /***/ }),

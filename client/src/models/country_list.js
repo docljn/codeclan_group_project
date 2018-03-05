@@ -1,4 +1,4 @@
-const languageCodes = require ('../resources/languageCodes');
+const languageCodes = require ('../resources/language_codes');
 
 const CountryList = function(url) {
   this.countries = [];
