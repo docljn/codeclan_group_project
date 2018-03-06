@@ -33,6 +33,10 @@ background: url(resised_block_world_map.jpg) repeat-x;
 animation: animate-background linear 15s infinite;
 }
 
+.phrases{
+  font-family: helvetica;
+}
+
 .additional_info{
   position: absolute;
   bottom: 60px;
