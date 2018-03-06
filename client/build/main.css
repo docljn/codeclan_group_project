@@ -10,18 +10,18 @@ h1{
 }
 
 .flag{
-  margin-left: 10%;
+  margin-left: 5%;
 }
 
 .footer{
   font-family: helvetica;
   font-size: 10px;
   padding-left: 20px;
-  position: absolute;
-  bottom: 0;
+  position: fixed;
   height: 60px;
   background-color: rgb(100, 225, 255);
   width: 100%;
+  bottom: 0;
 }
 
 div#banner{
@@ -31,6 +31,15 @@ margin: 0px auto;
 overflow: hidden;
 background: url(resised_block_world_map.jpg) repeat-x;
 animation: animate-background linear 15s infinite;
+}
+
+.additional_info{
+  position: absolute;
+  bottom: 60px;
+}
+
+.phrases{
+  margin-left: 10%
 }
 
 @keyframes animate-background {
