@@ -7,29 +7,34 @@ MongoClient.connect(url, function(err, client){
   console.log("error log", err);
   const db = client.db("travel_lingo");
 
-  phrasesRouter.get("/phrases/:languageCode", function(req, res){
+  phrasesRouter.get("/phrase/:languageCode/:id", function(req, res){
     const languageCode = req.params.languageCode;
     const collection = db.collection(languageCode);
     collection.find({}).toArray(function(err, docs){
       res.json(docs);
     })
   })
-  // maybe this route should dd 1 phrase at a time
+  // maybe this route should do 1 phrase at a time
   // to the languageCode collection
-  phrasesRouter.post("/phrases/:languageCode", function(req, res){
-    console.log("params", req.params.languageCode);
-    const languageCode = req.params.languageCode;
-    console.log("languageCode", languageCode);
-    const collection = db.collection(languageCode);
-    console.log("Request body. phrases", req.body.phrases);
+  phrasesRouter.post("/phrase/:languageCode", function(req, res){
 
-    collection.insert({phraseList: req.body.phrases});
+    const languageCode = req.params.languageCode;
+    const collection = db.collection(languageCode);
+    collection.insert({phrase: req.body.phrase});
     res.status(201);
     res.send();
   })
+
+  phrasesRouter.delete("/phrase/:languageCode", function(req, res){
+    const languageCode = req.params.languageCode;
+    const collection = db.collection(languageCode);
+    collection.remove();
+    res.status(204);
+    res.send();
+
+  })
+
 })
-
-
 
 module.exports = phrasesRouter;
 
