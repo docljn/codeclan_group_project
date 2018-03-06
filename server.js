@@ -87,8 +87,8 @@ console.log(res.text);
 
 
 app.use(express.static("client/build"));
-// app.use(require(__dirname + "/controllers/countries_controller"))
-
+// app.use(require(__dirname + "/controllers/phrases_controller"))
+app.use(require(__dirname + "/controllers/phrases_controller"))
 
 const server = app.listen(3000, function () {
   console.log("TravelApp listening at " + this.address().port);
