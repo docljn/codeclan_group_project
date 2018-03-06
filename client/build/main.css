@@ -9,6 +9,15 @@ h1{
   font-size: 54px;
 }
 
+h2{
+  font-family: 'Indie Flower', cursive;
+  font-size: 20px;
+}
+
+#countries{
+    margin-top: 20px;
+}
+
 .flag{
   margin-left: 5%;
 }
