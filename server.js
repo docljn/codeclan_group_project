@@ -42,12 +42,10 @@ app.post('/translate_api/', function (req, expressResponse) {
   Promise.all(promises)
     // values is the array which results from the promises being fulfilled
     .then( function (values) {
-      // it's fine up to here....
       console.log(values);
       const phrases = values.map( function (value) {
         return value.text;
       });
-      // const jsonString = JSON.stringify(phrases);
       expressResponse.json({data: phrases});
 
     })

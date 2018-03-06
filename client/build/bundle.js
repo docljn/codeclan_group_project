@@ -80,7 +80,7 @@
 
 const CountriesSelectView = __webpack_require__(/*! ./views/countries_select_view */ "./client/src/views/countries_select_view.js");
 const CountryList = __webpack_require__(/*! ./models/country_list */ "./client/src/models/country_list.js");
-// const phraseList = require('./models/phrase_list');
+const phraseList = __webpack_require__(/*! ./models/phrase_list */ "./client/src/models/phrase_list.js");
 
 
 const app = function(){
@@ -110,6 +110,7 @@ const app = function(){
     const requestBody = {language: languageToTranslateTo};
     console.log('request body', requestBody);
     request.send(JSON.stringify(requestBody));
+
   };
 };
 
@@ -119,7 +120,28 @@ const requestComplete = function(){
   const jsonString = this.responseText;
   const translatedPhraseArray = JSON.parse(jsonString);
   console.log('output of requestComplete', translatedPhraseArray);
+  populateBody(translatedPhraseArray);
 };
+
+
+const populateBody = function(translatedPhraseArray){
+  console.log('transl phr', translatedPhraseArray);
+  const div = document.getElementById('phrases');
+  div.innerText = "";
+  console.log(translatedPhraseArray.data);
+  for (i=0; i < translatedPhraseArray.data.length; i++){
+    const pOrig = document.createElement('p');
+    pOrig.innerText = phraseList[i];
+
+    const pTrans = document.createElement('p');
+    pTrans.innerText = translatedPhraseArray.data[i];
+
+    div.appendChild(pOrig);
+    div.appendChild(pTrans);
+    console.log(div);
+
+  }
+}
 
 document.addEventListener('DOMContentLoaded', app);
 
@@ -164,6 +186,21 @@ CountryList.prototype.populate = function(){
 };
 
 module.exports = CountryList;
+
+
+/***/ }),
+
+/***/ "./client/src/models/phrase_list.js":
+/*!******************************************!*\
+  !*** ./client/src/models/phrase_list.js ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+const phraseList = ['Hello', 'Goodbye', 'Please', 'Thank you', 'Where is the train station?', 'Where is the bank', 'How much is this?', 'I need help'];
+
+
+module.exports = phraseList;
 
 
 /***/ }),

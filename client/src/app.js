@@ -1,6 +1,6 @@
 const CountriesSelectView = require('./views/countries_select_view');
 const CountryList = require('./models/country_list');
-// const phraseList = require('./models/phrase_list');
+const phraseList = require('./models/phrase_list');
 
 
 const app = function(){
@@ -30,6 +30,7 @@ const app = function(){
     const requestBody = {language: languageToTranslateTo};
     console.log('request body', requestBody);
     request.send(JSON.stringify(requestBody));
+
   };
 };
 
@@ -39,6 +40,27 @@ const requestComplete = function(){
   const jsonString = this.responseText;
   const translatedPhraseArray = JSON.parse(jsonString);
   console.log('output of requestComplete', translatedPhraseArray);
+  populateBody(translatedPhraseArray);
 };
+
+
+const populateBody = function(translatedPhraseArray){
+  console.log('transl phr', translatedPhraseArray);
+  const div = document.getElementById('phrases');
+  div.innerText = "";
+  console.log(translatedPhraseArray.data);
+  for (i=0; i < translatedPhraseArray.data.length; i++){
+    const pOrig = document.createElement('p');
+    pOrig.innerText = phraseList[i];
+
+    const pTrans = document.createElement('p');
+    pTrans.innerText = translatedPhraseArray.data[i];
+
+    div.appendChild(pOrig);
+    div.appendChild(pTrans);
+    console.log(div);
+
+  }
+}
 
 document.addEventListener('DOMContentLoaded', app);
