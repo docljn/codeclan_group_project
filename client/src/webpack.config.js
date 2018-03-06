@@ -4,7 +4,7 @@ config = {
     filename: "bundle.js",
     path: __dirname + "/client/build"
   },
-  devtool: 'source-map'
+  devtool: "source-map"
 };
 
 module.exports = config;
