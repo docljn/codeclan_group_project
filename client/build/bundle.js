@@ -84,66 +84,61 @@ const phraseList = __webpack_require__(/*! ./models/phrase_list */ "./client/src
 
 
 const app = function(){
-  const countriesSelectView = new CountriesSelectView(document.querySelector('#countries'));
-  const world = new CountryList('https://restcountries.eu/rest/v2/all?fields=name;languages');
+
+  const countriesSelectView = new CountriesSelectView(document.querySelector("#countries"));
+  const world = new CountryList("https://restcountries.eu/rest/v2/all?fields=name;languages;flag");
 
   world.onUpdate = function(countries) {
     countriesSelectView.render(countries);
   };
-
   world.populate();
 
   countriesSelectView.onChange = function(country){
-
-    // const phraseToTranslate = phraseList[0];
     const languageToTranslateTo = country.languages[0].iso639_1;
-
+    const flag_src = country.flag;
     const request = new XMLHttpRequest();
-
-    request.open('POST', '/translate_api/');
-
-    request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-
+    request.open("POST", "/translate_api/");
+    request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     request.onload = requestComplete;
-
-    // const requestBody = {phrase: phraseToTranslate, language: languageToTranslateTo}
     const requestBody = {language: languageToTranslateTo};
-    console.log('request body', requestBody);
+    console.log("request body", requestBody);
     request.send(JSON.stringify(requestBody));
-
+    createFlag(flag_src);
   };
 };
-
 
 const requestComplete = function(){
   if(this.status !== 200) return;
   const jsonString = this.responseText;
   const translatedPhraseArray = JSON.parse(jsonString);
-  console.log('output of requestComplete', translatedPhraseArray);
+  console.log("output of requestComplete", translatedPhraseArray);
   populateBody(translatedPhraseArray);
 };
 
-
 const populateBody = function(translatedPhraseArray){
-  console.log('transl phr', translatedPhraseArray);
-  const div = document.getElementById('phrases');
+  const div = document.getElementById("phrases");
   div.innerText = "";
-  console.log(translatedPhraseArray.data);
-  for (i=0; i < translatedPhraseArray.data.length; i++){
-    const pOrig = document.createElement('p');
+  for (let i=0; i < translatedPhraseArray.data.length; i++){
+    const pOrig = document.createElement("p");
     pOrig.innerText = phraseList[i];
-
-    const pTrans = document.createElement('p');
+    const pTrans = document.createElement("p");
     pTrans.innerText = translatedPhraseArray.data[i];
-
     div.appendChild(pOrig);
     div.appendChild(pTrans);
-    console.log(div);
-
   }
+};
+
+const createFlag = function(flagImage){
+  const div = document.getElementById("flag_id");
+  div.innerHTML = "";
+  const img = document.createElement("img");
+  console.log(flagImage);
+  img.src = flagImage;
+  img.width = 90;
+  div.appendChild(img);
 }
 
-document.addEventListener('DOMContentLoaded', app);
+document.addEventListener("DOMContentLoaded", app);
 
 
 /***/ }),
@@ -164,11 +159,11 @@ const CountryList = function(url) {
 };
 
 CountryList.prototype.populate = function(){
-  let filteredCountries = [{'languages': [
-    { 'iso639_1': 'en', 'name': ''} ] , name: 'Select destination country', index: 0}];
+  let filteredCountries = [{"languages": [
+    { "iso639_1": "en", "name": ""} ] , name: "Select destination country", index: 0}];
 
   const request = new XMLHttpRequest();
-  request.open('GET', this.url);
+  request.open("GET", this.url);
   request.onload = function() {
     if (request.status === 200) {
       const jsonString = request.responseText;
@@ -197,7 +192,7 @@ module.exports = CountryList;
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-const phraseList = ['Hello', 'Goodbye', 'Please', 'Thank you', 'Where is the train station?', 'Where is the bank', 'How much is this?', 'I need help'];
+const phraseList = ["Hello", "Goodbye", "Please", "Thank you", "Where is the train station?", "Where is the bank", "How much is this?", "I need help!"];
 
 
 module.exports = phraseList;
@@ -212,7 +207,7 @@ module.exports = phraseList;
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-const languageCodes = [ 'af', 'sq', 'am', 'ar', 'hy', 'az', 'eu', 'be', 'bn', 'bs', 'bg', 'ca', 'zh', 'co', 'hr', 'cs', 'da', 'nl', 'en', 'eo', 'et', 'fi', 'fr', 'fy', 'gl', 'ka', 'de', 'el', 'gu', 'ht', 'ha', 'haw', 'iw', 'hi', 'hmn', 'hu', 'is', 'ig', 'id', 'ga', 'it', 'ja', 'jw', 'kn', 'kk', 'km', 'ko', 'ku', 'ky', 'lo', 'la', 'lv', 'lt', 'lb', 'mk', 'mg', 'ms', 'ml', 'mt', 'mi', 'mr', 'mn', 'my', 'ne', 'no', 'ny', 'ps', 'fa', 'pl', 'pt', 'pa', 'ro', 'ru', 'sm', 'gd', 'sr', 'st', 'sn','sd','si', 'sk', 'sl', 'so', 'es', 'su', 'sw', 'sv', 'tl', 'tg', 'ta', 'te', 'th', 'tr', 'uk', 'ur', 'uz', 'vi', 'cy', 'xh', 'yi', 'yo', 'zu'];
+const languageCodes = [ "af", "sq", "am", "ar", "hy", "az", "eu", "be", "bn", "bs", "bg", "ca", "zh", "co", "hr", "cs", "da", "nl", "en", "eo", "et", "fi", "fr", "fy", "gl", "ka", "de", "el", "gu", "ht", "ha", "haw", "iw", "hi", "hmn", "hu", "is", "ig", "id", "ga", "it", "ja", "jw", "kn", "kk", "km", "ko", "ku", "ky", "lo", "la", "lv", "lt", "lb", "mk", "mg", "ms", "ml", "mt", "mi", "mr", "mn", "my", "ne", "no", "ny", "ps", "fa", "pl", "pt", "pa", "ro", "ru", "sm", "gd", "sr", "st", "sn","sd","si", "sk", "sl", "so", "es", "su", "sw", "sv", "tl", "tg", "ta", "te", "th", "tr", "uk", "ur", "uz", "vi", "cy", "xh", "yi", "yo", "zu"];
 
 module.exports = languageCodes;
 
