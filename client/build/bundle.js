@@ -79,8 +79,8 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 const CountriesSelectView = __webpack_require__(/*! ./views/countries_select_view */ "./client/src/views/countries_select_view.js");
-
 const CountryList = __webpack_require__(/*! ./models/country_list */ "./client/src/models/country_list.js");
+const phraseList = __webpack_require__(/*! ./models/phrase_list */ "./client/src/models/phrase_list.js");
 
 
 const app = function(){
@@ -94,13 +94,56 @@ const app = function(){
   world.populate();
 
   countriesSelectView.onChange = function(country){
-    console.log(country);
+
+    // const phraseToTranslate = phraseList[0];
+    const languageToTranslateTo = country.languages[0].iso639_1;
+
+    const request = new XMLHttpRequest();
+
+    request.open('POST', '/translate_api/');
+
+    request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+
+    request.onload = requestComplete;
+
+    // const requestBody = {phrase: phraseToTranslate, language: languageToTranslateTo}
+    const requestBody = {language: languageToTranslateTo};
+    console.log('request body', requestBody);
+    request.send(JSON.stringify(requestBody));
+
+  };
+};
+
+
+const requestComplete = function(){
+  if(this.status !== 200) return;
+  const jsonString = this.responseText;
+  const translatedPhraseArray = JSON.parse(jsonString);
+  console.log('output of requestComplete', translatedPhraseArray);
+  populateBody(translatedPhraseArray);
+};
+
+
+const populateBody = function(translatedPhraseArray){
+  console.log('transl phr', translatedPhraseArray);
+  const div = document.getElementById('phrases');
+  div.innerText = "";
+  console.log(translatedPhraseArray.data);
+  for (i=0; i < translatedPhraseArray.data.length; i++){
+    const pOrig = document.createElement('p');
+    pOrig.innerText = phraseList[i];
+
+    const pTrans = document.createElement('p');
+    pTrans.innerText = translatedPhraseArray.data[i];
+
+    div.appendChild(pOrig);
+    div.appendChild(pTrans);
+    console.log(div);
+
   }
-
-
 }
 
-document.addEventListener("DOMContentLoaded", app)
+document.addEventListener('DOMContentLoaded', app);
 
 
 /***/ }),
@@ -110,7 +153,9 @@ document.addEventListener("DOMContentLoaded", app)
   !*** ./client/src/models/country_list.js ***!
   \*******************************************/
 /*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
+
+const languageCodes = __webpack_require__ (/*! ../resources/language_codes */ "./client/src/resources/language_codes.js");
 
 const CountryList = function(url) {
   this.countries = [];
@@ -119,11 +164,11 @@ const CountryList = function(url) {
 };
 
 CountryList.prototype.populate = function(){
-  let filteredCountries = [{"languages": [
-{ "iso639_1": "en", "name": ""} ] , name: "Select destination country", index: 0}];
-  const languageCodes = [ 'af', 'sq', 'am', 'ar', 'hy', 'az', 'eu', 'be', 'bn', 'bs', 'bg', 'ca', 'zh', 'co', 'hr', 'cs', 'da', 'nl', 'en', 'eo', 'et', 'fi', 'fr', 'fy', 'gl', 'ka', 'de', 'el', 'gu', 'ht', 'ha', 'haw', 'iw', 'hi', 'hmn', 'hu', 'is', 'ig', 'id', 'ga', 'it', 'ja', 'jw', 'kn', 'kk', 'km', 'ko', 'ku', 'ky', 'lo', 'la', 'lv', 'lt', 'lb', 'mk', 'mg', 'ms', 'ml', 'mt', 'mi', 'mr', 'mn', 'my', 'ne', 'no', 'ny', 'ps', 'fa', 'pl', 'pt', 'pa', 'ro', 'ru', 'sm', 'gd', 'sr', 'st', 'sn','sd','si', 'sk', 'sl', 'so', 'es', 'su', 'sw', 'sv', 'tl', 'tg', 'ta', 'te', 'th', 'tr', 'uk', 'ur', 'uz', 'vi', 'cy', 'xh', 'yi', 'yo', 'zu']
+  let filteredCountries = [{'languages': [
+    { 'iso639_1': 'en', 'name': ''} ] , name: 'Select destination country', index: 0}];
+
   const request = new XMLHttpRequest();
-  request.open("GET", this.url);
+  request.open('GET', this.url);
   request.onload = function() {
     if (request.status === 200) {
       const jsonString = request.responseText;
@@ -133,15 +178,43 @@ CountryList.prototype.populate = function(){
         if (languageCodes.includes(country.languages[0].iso639_1)){
           filteredCountries.push(country);
         }
-
-      })
+      });
       this.onUpdate(filteredCountries);
     }
   }.bind(this);
   request.send(null);
-}
+};
 
 module.exports = CountryList;
+
+
+/***/ }),
+
+/***/ "./client/src/models/phrase_list.js":
+/*!******************************************!*\
+  !*** ./client/src/models/phrase_list.js ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+const phraseList = ['Hello', 'Goodbye', 'Please', 'Thank you', 'Where is the train station?', 'Where is the bank', 'How much is this?', 'I need help'];
+
+
+module.exports = phraseList;
+
+
+/***/ }),
+
+/***/ "./client/src/resources/language_codes.js":
+/*!************************************************!*\
+  !*** ./client/src/resources/language_codes.js ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+const languageCodes = [ 'af', 'sq', 'am', 'ar', 'hy', 'az', 'eu', 'be', 'bn', 'bs', 'bg', 'ca', 'zh', 'co', 'hr', 'cs', 'da', 'nl', 'en', 'eo', 'et', 'fi', 'fr', 'fy', 'gl', 'ka', 'de', 'el', 'gu', 'ht', 'ha', 'haw', 'iw', 'hi', 'hmn', 'hu', 'is', 'ig', 'id', 'ga', 'it', 'ja', 'jw', 'kn', 'kk', 'km', 'ko', 'ku', 'ky', 'lo', 'la', 'lv', 'lt', 'lb', 'mk', 'mg', 'ms', 'ml', 'mt', 'mi', 'mr', 'mn', 'my', 'ne', 'no', 'ny', 'ps', 'fa', 'pl', 'pt', 'pa', 'ro', 'ru', 'sm', 'gd', 'sr', 'st', 'sn','sd','si', 'sk', 'sl', 'so', 'es', 'su', 'sw', 'sv', 'tl', 'tg', 'ta', 'te', 'th', 'tr', 'uk', 'ur', 'uz', 'vi', 'cy', 'xh', 'yi', 'yo', 'zu'];
+
+module.exports = languageCodes;
 
 
 /***/ }),
