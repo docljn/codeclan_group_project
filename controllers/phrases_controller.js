@@ -7,7 +7,8 @@ MongoClient.connect(url, function(err, client){
   console.log("error log", err);
   const db = client.db("travel_lingo");
 
-  phrasesRouter.get("/phrase/:languageCode", function(req, res){
+  // Gets all phrases for the language code
+  phrasesRouter.get("/phrases/:languageCode", function(req, res){
     const languageCode = req.params.languageCode;
     const collection = db.collection(languageCode);
     collection.find({}).toArray(function(err, docs){
@@ -15,7 +16,8 @@ MongoClient.connect(url, function(err, client){
     })
   })
 
-  phrasesRouter.post("/phrase/:languageCode", function(req, res){
+  // Create one phrase for language code
+  phrasesRouter.post("/phrases/:languageCode", function(req, res){
 
     const languageCode = req.params.languageCode;
     const collection = db.collection(languageCode);
@@ -26,7 +28,7 @@ MongoClient.connect(url, function(err, client){
 
   // Delete All route - Deletes all phrases in a language collection
 
-  phrasesRouter.delete("/phrase/:languageCode", function(req, res){
+  phrasesRouter.delete("/phrases/:languageCode", function(req, res){
     const languageCode = req.params.languageCode;
     const collection = db.collection(languageCode);
     collection.remove();
