@@ -4,10 +4,32 @@ const phraseList = require("./models/phrase_list");
 
 
 const app = function(){
+// om start
+
+if ( 'speechSynthesis' in window ) {
+  const phrase1 = new SpeechSynthesisUtterance('Hola');
+  const phrase2 = new SpeechSynthesisUtterance('Bonjour');
+  phrase1.lang = ('es-ES');
+  window.speechSynthesis.speak(phrase1);
+  phrase2.lang = ('fr-FR');
+  window.speechSynthesis.speak(phrase2);
+}
+
+  // const input_text = "Hello";
+  // const pitchValue = 1
+  // const rateValue = 1
+  //  const voices = []
+  // ** problem with getVoices **
+  // voices = window.speechSynthesis.getVoices();
+
+  // console.log("voices" voices);
+  // const utterThis = new SpeechSynthesisUtterance(input_text);
+  // utterThis.voice = voices[10];
+
 
   const countriesSelectView = new CountriesSelectView(document.querySelector("#countries"));
-  const world = new CountryList("https://restcountries.eu/rest/v2/all?fields=name;languages;flag");
-
+  const world = new CountryList("https://restcountries.eu/rest/v2/all?fields=name;languages;flag;alpha2Code");
+// om end
   world.onUpdate = function(countries) {
     countriesSelectView.render(countries);
   };
@@ -16,6 +38,9 @@ const app = function(){
   countriesSelectView.onChange = function(country){
     const languageToTranslateTo = country.languages[0].iso639_1;
     const flag_src = country.flag;
+    // om start
+    const country_alpha2Code = country.alpha2Code;
+    // om end
     const request = new XMLHttpRequest();
     request.open("POST", "/translate_api/");
     request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
