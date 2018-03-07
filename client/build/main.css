@@ -47,8 +47,8 @@ animation: animate-background linear 15s infinite;
 }
 
 .additional_info{
-  position: absolute;
-  bottom: 60px;
+  /* position: absolute; */
+  /* bottom: 60px; */
 }
 
 .phrases{
