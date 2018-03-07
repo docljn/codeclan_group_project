@@ -1,18 +1,19 @@
 # Top 10 Travel Phrases
 
 1. Hello
-2. Please
-3. Thank-you
-4. Excuse me
-5. Where is ?
-6. How much does it cost ?
-7. I would like
-8. Can I have the bill please ?
-9. Help
-10. Cheers
+2. Goodbye
+3. Please
+4. Thank you
+5. How much is this ?
+6. I would like
+7. Can I have the bill please ?
+8. Where is the train station ?
+9. Where is a bank ?
+10. I need help!
 
 # Categories
 
+## Greetings
 - Hello
 - Goodbye
 - Good morning
@@ -57,13 +58,12 @@
 - Go Straight ahead
 - At the corner
 
-
 ## Restaurant
 
 - I would like…
 - Can I have the bill please ?
 
-##Numbers
+## Numbers
 - 1-10
 - 20
 - 50
