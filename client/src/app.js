@@ -6,25 +6,26 @@ const phraseList = require("./models/phrase_list");
 const app = function(){
 // om start
 
-if ( 'speechSynthesis' in window ) {
-  const phrase1 = new SpeechSynthesisUtterance('Hola');
-  const phrase2 = new SpeechSynthesisUtterance('Bonjour');
-  phrase1.lang = ('es-ES');
-  window.speechSynthesis.speak(phrase1);
-  phrase2.lang = ('fr-FR');
-  window.speechSynthesis.speak(phrase2);
-}
+// if ( 'speechSynthesis' in window ) {
+//   const phrase1 = new SpeechSynthesisUtterance('Hola');
+//   const phrase2 = new SpeechSynthesisUtterance('Bonjour');
+//   phrase1.lang = ('es-ES');
+//   window.speechSynthesis.speak(phrase1);
+//   phrase2.lang = ('fr-FR');
+//   window.speechSynthesis.speak(phrase2);
+// }
 
-  // const input_text = "Hello";
-  // const pitchValue = 1
-  // const rateValue = 1
-  //  const voices = []
+  const input_text = "Hello";
+  const pitchValue = 1
+  const rateValue = 1
+  let voices = []
   // ** problem with getVoices **
-  // voices = window.speechSynthesis.getVoices();
+  voices = window.speechSynthesis.getVoices();
+  console.log(typeof speechSynthesis);
 
-  // console.log("voices" voices);
-  // const utterThis = new SpeechSynthesisUtterance(input_text);
-  // utterThis.voice = voices[10];
+  // console.log("voices", voices);
+  const utterThis = new SpeechSynthesisUtterance(input_text);
+  utterThis.voice = voices[10];
 
 
   const countriesSelectView = new CountriesSelectView(document.querySelector("#countries"));
