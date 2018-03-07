@@ -1,7 +1,6 @@
 const CountriesSelectView = require("./views/countries_select_view");
 const CountryList = require("./models/country_list");
 const phraseList = require("./models/phrase_list");
-// const translatePhrase = require("./models/translate");
 
 
 const app = function(){
@@ -66,7 +65,6 @@ const createFlag = function(flagImage){
 const getCustomPhraseButtonClicked = function(){
   console.log("Home text buttonclicked");
   const phraseInput = document.getElementById("phrase_input");
-  // const phraseToTranslate = [phraseInput.innerText];
   const phraseToTranslate = phraseInput.value;
   const languageCode = localStorage.getItem("targetLanguage");
   const requestPhrase = new XMLHttpRequest();
