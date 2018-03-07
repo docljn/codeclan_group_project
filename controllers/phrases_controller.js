@@ -4,7 +4,7 @@ const MongoClient = require("mongodb").MongoClient;
 const url = "mongodb://localhost:27017";
 
 MongoClient.connect(url, function(err, client){
-  console.log("error log", err);
+  // console.log("error log", err);
   const db = client.db("travel_lingo");
 
   // Gets all phrases for the language code
