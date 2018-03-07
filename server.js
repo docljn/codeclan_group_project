@@ -32,26 +32,34 @@ app.get("/", function (req, res) {
 app.post("/translate_api/", function (req, expressResponse) {
 
   const languageToTranslateTo = req.body.language;
+  const bodyPhrase = req.body.phrase;
+  console.log("bodyPhrase", bodyPhrase);
+  if (req.body.phrase = "n/a"){
+    promises = phraseList.map( function (phraseToTranslate) {
+      return translate(phraseToTranslate, {to: languageToTranslateTo});
+    });
+  } else {
+    promises = phraseList.map( function (bodyPhrase) {
+      return translate(bodyPhrase, {to: languageToTranslateTo});
+    });
+  };
 
-  const promises = phraseList.map( function (phraseToTranslate) {
-    return translate(phraseToTranslate, {to: languageToTranslateTo});
-  });
-
-  console.log("promises", promises);
+  // promises = [translate(bodyPhrase, {to: languageToTranslateTo})];
+  // console.log("promises", promises);
 
   Promise.all(promises)
-    // values is the array which results from the promises being fulfilled
-    .then( function (values) {
-      console.log(values);
-      const phrases = values.map( function (value) {
-        return value.text;
-      });
-      expressResponse.json({data: phrases});
-
-    })
-    .catch(err => {
-      console.error("console error", err);
+  // values is the array which results from the promises being fulfilled
+  .then( function (values) {
+    // console.log(values);
+    const phrases = values.map( function (value) {
+      return value.text;
     });
+    expressResponse.json({data: phrases});
+
+  })
+  .catch(err => {
+    console.error("console error", err);
+  });
 
 
 
