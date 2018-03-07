@@ -6,7 +6,7 @@ const phraseList = require("./models/phrase_list");
 
 const app = function(){
 
-  const getHomeTextButton = document.querySelector("#submit_phrase");
+  const getHomeTextButton = document.querySelector("#test_button");
   getHomeTextButton.addEventListener('click', getHomeTextButtonClicked);
 
   const countriesSelectView = new CountriesSelectView(document.querySelector("#countries"));
@@ -76,28 +76,34 @@ const getHomeTextButtonClicked = function(){
   console.log(" language code", languageCode);
   console.log("phraseToTranslate", phraseToTranslate);
 
-  const request = new XMLHttpRequest();
-  request.open("POST", "/translate_api/");
-  request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-  request.onload = appendNewTranslation;
-  const requestBody = {language: languageCode, phrase: [phraseToTranslate]};
+  const requestPhrase = new XMLHttpRequest();
+  requestPhrase.open("POST", "/translate_api/single_phrase/");
+  requestPhrase.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  requestPhrase.onload = requestCompleteSinglePhrase;
+  const requestBody = {language: languageCode, phrase: phraseToTranslate};
   console.log("request body", requestBody);
-  request.send(JSON.stringify(requestBody));
-
+  requestPhrase.send(JSON.stringify(requestBody));
+  // appendNewTranslation();
 }
 
-const appendNewTranslation = function(){
+const requestCompleteSinglePhrase = function(){
+  // console.log("request complete target language", languageToTranslateTo);
   if(this.status !== 200) return;
   const jsonString = this.responseText;
-  const translatedPhraseArray = JSON.parse(jsonString);
-  console.log("output of appendNewTranslatione", translatedPhraseArray);
+  const translatedPhrase = JSON.parse(jsonString);
+  console.log("output of requestComplete", translatedPhrase);
+  appendNewTranslation(translatedPhrase);
+};
 
+const appendNewTranslation = function(translatedPhrase){
+  // console.log("output of appendNewTranslatione", translatedPhrase);
 
   const div = document.getElementById("phrases");
   const pOrig = document.createElement("p");
-  pOrig.innerText = phraseInput;
+  pOrig.innerText = "dummy phrase";
   const pTrans = document.createElement("p");
-  pTrans.innerText = translation;
+  console.log(translatedPhrase);
+  pTrans.innerText = translatedPhrase.data;
   div.appendChild(pOrig);
   div.appendChild(pTrans);
 }

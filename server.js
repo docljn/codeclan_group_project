@@ -32,20 +32,9 @@ app.get("/", function (req, res) {
 app.post("/translate_api/", function (req, expressResponse) {
 
   const languageToTranslateTo = req.body.language;
-  const bodyPhrase = req.body.phrase;
-  console.log("bodyPhrase", bodyPhrase);
-  if (req.body.phrase = "n/a"){
-    promises = phraseList.map( function (phraseToTranslate) {
-      return translate(phraseToTranslate, {to: languageToTranslateTo});
-    });
-  } else {
-    promises = phraseList.map( function (bodyPhrase) {
-      return translate(bodyPhrase, {to: languageToTranslateTo});
-    });
-  };
-
-  // promises = [translate(bodyPhrase, {to: languageToTranslateTo})];
-  // console.log("promises", promises);
+  const promises = phraseList.map( function (phraseToTranslate) {
+    return translate(phraseToTranslate, {to: languageToTranslateTo});
+  });
 
   Promise.all(promises)
   // values is the array which results from the promises being fulfilled
@@ -60,9 +49,29 @@ app.post("/translate_api/", function (req, expressResponse) {
   .catch(err => {
     console.error("console error", err);
   });
+});
+// });
 
+app.post("/translate_api/single_phrase/", function (req, expressResponse) {
 
+  console.log("Finding the single_phrase route");
 
+  const languageToTranslateTo = req.body.language;
+  const bodyPhrase = req.body.phrase;
+  console.log("bodyPhrase", bodyPhrase);
+
+  // const promises = phraseList.map( function (bodyPhrase) {
+  //   return translate(bodyPhrase, {to: languageToTranslateTo});
+  // });
+
+  translate(bodyPhrase, {to: languageToTranslateTo}).then(translateResponse => {
+      const aPhrase = translateResponse.text;
+      console.log(aPhrase);
+      expressResponse.json({data: aPhrase});
+
+    }).catch(err => {
+      console.error("console error", err);
+    });
 
 });
 
@@ -101,3 +110,4 @@ app.use(require(__dirname + "/controllers/phrases_controller"))
 const server = app.listen(3000, function () {
   console.log("TravelApp listening at " + this.address().port);
 });
+// });
