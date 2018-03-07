@@ -12,6 +12,7 @@ MongoClient.connect(url, function(err, client){
     const languageCode = req.params.languageCode;
     const collection = db.collection(languageCode);
     collection.find({}).toArray(function(err, docs){
+      console.log("docs", docs);
       res.json(docs);
     })
   })
