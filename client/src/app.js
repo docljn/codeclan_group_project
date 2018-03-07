@@ -14,9 +14,11 @@ const app = function(){
   //   phrase2.lang = ('fr-FR');
   //   window.speechSynthesis.speak(phrase2);
   // }
-
-
-
+  let voices = [];
+  populateVoiceList();
+  if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
+    speechSynthesis.onvoiceschanged = populateVoiceList;
+  }
 
   const countriesSelectView = new CountriesSelectView(document.querySelector("#countries"));
   const world = new CountryList("https://restcountries.eu/rest/v2/all?fields=name;languages;flag;alpha2Code");
@@ -31,10 +33,9 @@ const app = function(){
     const flag_src = country.flag;
     // om start
     const country_alpha2Code = country.alpha2Code;
-    const speechLanguage =  "'" + languageToTranslateTo + "-" + country_alpha2Code + "'" ;
+    const speechLanguage =  languageToTranslateTo + "-" + country_alpha2Code;
 
     // const speechLanguage = 'es-ES';
-
     console.log("speechLanguage", speechLanguage);
     // om end
     const request = new XMLHttpRequest();
@@ -45,8 +46,9 @@ const app = function(){
     console.log("request body", requestBody);
     request.send(JSON.stringify(requestBody));
     createFlag(flag_src);
-    speakPhrase("hola", speechLanguage);
-    // speakPhrase("Bonjour", speechLanguage);
+
+    // speakPhrase("hola", speechLanguage);
+    speakPhrase("bonjour", speechLanguage);
   };
 };
 
@@ -81,32 +83,29 @@ const createFlag = function(flagImage){
   img.width = 90;
   div.appendChild(img);
 }
-// **
 
 function speakPhrase(phrase, speechLanguage) {
   let msg = new SpeechSynthesisUtterance();
   msg.text = phrase;
   msg.lang = speechLanguage;
 
-  const awaitVoices = new Promise(done =>
-    window.speechSynthesis.onvoiceschanged = done);
+  for(let i=0;i<voices.length;i++){
+    if(voices[i].lang==speechLanguage) {
+      msg.voice = voices[i];
+    }
+  };
+  speechSynthesis.speak(msg);
+}
 
-    const filterVoices = new Promise(function(resolve, reject){
-      let voices = window.speechSynthesis.getVoices();
-      // for(let i=0;i<voices.length;i++){
-      //
-      //   if(voices[i].lang==speechLanguage) {
-      //     // msg.voice = voices[i]; // Note: some voices don't support altering params
-      //     return voices[i];
-      //     console.log("voices[i]", voices[i]);
-      //   }
-      // };
-    });
-    awaitVoices
-    .then(filterVoices)
+function populateVoiceList() {
+  if(typeof speechSynthesis === 'undefined') {
+    return;
   }
 
-  // .then(filterVoices).then(msg.voice = filterVoices[0]).then(speechSynthesis.speak(msg))
-  // **
+  voices = speechSynthesis.getVoices();
+  console.log("voices", voices);
+}
 
-  document.addEventListener("DOMContentLoaded", app);
+
+
+document.addEventListener("DOMContentLoaded", app);
