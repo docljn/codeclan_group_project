@@ -29,6 +29,7 @@ const app = function(){
     request.send(JSON.stringify(requestBody));
     createFlag(flag_src);
   };
+  setGreeting();
 };
 
 const requestComplete = function(){
@@ -38,6 +39,37 @@ const requestComplete = function(){
   console.log("output of requestComplete", translatedPhraseArray);
   populateBody(translatedPhraseArray);
 };
+
+const setGreeting = function(){
+
+  const animatedGreeting = document.getElementById("greeting");
+  animatedGreeting.innerText = "greeting";
+
+  const greetingArray = ["Hello", "Bonjour", "Salaam", "Hola", "Guten Tag", "Ciao", "Ola", "Namaste"];
+
+  const i = 0;
+
+  const greetingNext = function(){
+    i++;
+    animatedGreeting.style.opacity = 0;
+    if(animatedGreeting > (greetingArray.length -1)){
+      i = 0;
+    }
+    setTimeout('greetingSlide()',1000);
+  }
+
+  const greetingSlide = function(){
+    animatedGreeting.innerText = greetingArray[i];
+    animatedGreeting.style.opacity = 1;
+    setTimeout('greetingNext()', 2000);
+  }
+
+  greetingSlide();
+
+
+  // greetingArray.forEach(function(greeting)){
+  // }
+}
 
 const populateBody = function(translatedPhraseArray){
   const div = document.getElementById("phrases");
