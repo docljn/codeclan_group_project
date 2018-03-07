@@ -6,8 +6,8 @@ const phraseList = require("./models/phrase_list");
 
 const app = function(){
 
-  const getHomeTextButton = document.querySelector("#test_button");
-  getHomeTextButton.addEventListener('click', getHomeTextButtonClicked);
+  const getCustomPhraseButton = document.querySelector("#submit_phrase");
+  getCustomPhraseButton.addEventListener('click', getCustomPhraseButtonClicked);
 
   const countriesSelectView = new CountriesSelectView(document.querySelector("#countries"));
   const world = new CountryList("https://restcountries.eu/rest/v2/all?fields=name;languages;flag");
@@ -33,7 +33,6 @@ const app = function(){
 };
 
 const requestComplete = function(){
-  // console.log("request complete target language", languageToTranslateTo);
   if(this.status !== 200) return;
   const jsonString = this.responseText;
   const translatedPhraseArray = JSON.parse(jsonString);
@@ -43,7 +42,6 @@ const requestComplete = function(){
 
 const populateBody = function(translatedPhraseArray){
   const div = document.getElementById("phrases");
-  // console.log(localStorage.getItem("targetLanguage"));
   div.innerText = "";
   for (let i=0; i < translatedPhraseArray.data.length; i++){
     const pOrig = document.createElement("p");
@@ -65,17 +63,12 @@ const createFlag = function(flagImage){
   div.appendChild(img);
 }
 
-const getHomeTextButtonClicked = function(){
+const getCustomPhraseButtonClicked = function(){
   console.log("Home text buttonclicked");
-  // const formInput = document.getElementsByClass("form");
-  // formInput.setAttribute("action", "/translate_api/"+ )
-  const phraseInput = document.getElementById("input-phrase")
+  const phraseInput = document.getElementById("phrase_input");
   // const phraseToTranslate = [phraseInput.innerText];
-  const phraseToTranslate = "Dummy phrase";
+  const phraseToTranslate = phraseInput.value;
   const languageCode = localStorage.getItem("targetLanguage");
-  console.log(" language code", languageCode);
-  console.log("phraseToTranslate", phraseToTranslate);
-
   const requestPhrase = new XMLHttpRequest();
   requestPhrase.open("POST", "/translate_api/single_phrase/");
   requestPhrase.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -83,11 +76,9 @@ const getHomeTextButtonClicked = function(){
   const requestBody = {language: languageCode, phrase: phraseToTranslate};
   console.log("request body", requestBody);
   requestPhrase.send(JSON.stringify(requestBody));
-  // appendNewTranslation();
 }
 
 const requestCompleteSinglePhrase = function(){
-  // console.log("request complete target language", languageToTranslateTo);
   if(this.status !== 200) return;
   const jsonString = this.responseText;
   const translatedPhrase = JSON.parse(jsonString);
@@ -96,11 +87,11 @@ const requestCompleteSinglePhrase = function(){
 };
 
 const appendNewTranslation = function(translatedPhrase){
-  // console.log("output of appendNewTranslatione", translatedPhrase);
-
   const div = document.getElementById("phrases");
   const pOrig = document.createElement("p");
-  pOrig.innerText = "dummy phrase";
+  const phraseToTranslate = document.getElementById("phrase_input");
+  pOrig.innerText = phraseToTranslate.value;
+  console.log(phraseToTranslate);
   const pTrans = document.createElement("p");
   console.log(translatedPhrase);
   pTrans.innerText = translatedPhrase.data;
