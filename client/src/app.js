@@ -93,8 +93,8 @@ const appendNewTranslation = function(translatedPhrase){
   const pTrans = document.createElement("p");
   console.log(translatedPhrase);
   pTrans.innerText = translatedPhrase.data;
-  div.appendChild(pOrig);
-  div.appendChild(pTrans);
+  div.prepend(pTrans);
+  div.prepend(pOrig);
 }
 
 document.addEventListener("DOMContentLoaded", app);
