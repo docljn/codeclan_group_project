@@ -4,16 +4,7 @@ const phraseList = require("./models/phrase_list");
 
 
 const app = function(){
-  // om start
 
-  // if ( 'speechSynthesis' in window ) {
-  //   const phrase1 = new SpeechSynthesisUtterance('Hola');
-  //   const phrase2 = new SpeechSynthesisUtterance('Bonjour');
-  //   phrase1.lang = ('es-ES');
-  //   window.speechSynthesis.speak(phrase1);
-  //   phrase2.lang = ('fr-FR');
-  //   window.speechSynthesis.speak(phrase2);
-  // }
   let voices = [];
   populateVoiceList();
   if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
@@ -22,7 +13,7 @@ const app = function(){
 
   const countriesSelectView = new CountriesSelectView(document.querySelector("#countries"));
   const world = new CountryList("https://restcountries.eu/rest/v2/all?fields=name;languages;flag;alpha2Code");
-  // om end
+
   world.onUpdate = function(countries) {
     countriesSelectView.render(countries);
   };
@@ -31,13 +22,9 @@ const app = function(){
   countriesSelectView.onChange = function(country){
     const languageToTranslateTo = country.languages[0].iso639_1;
     const flag_src = country.flag;
-    // om start
     const country_alpha2Code = country.alpha2Code;
     const speechLanguage =  languageToTranslateTo + "-" + country_alpha2Code;
-
-    // const speechLanguage = 'es-ES';
     console.log("speechLanguage", speechLanguage);
-    // om end
     const request = new XMLHttpRequest();
     request.open("POST", "/translate_api/");
     request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -46,12 +33,10 @@ const app = function(){
     console.log("request body", requestBody);
     request.send(JSON.stringify(requestBody));
     createFlag(flag_src);
-
-    // speakPhrase("hola", speechLanguage);
+    // ** hardcoded phrase at the moment to prove text to speech works **
     speakPhrase("bonjour", speechLanguage);
   };
 };
-
 
 const requestComplete = function(){
   if(this.status !== 200) return;
@@ -101,11 +86,8 @@ function populateVoiceList() {
   if(typeof speechSynthesis === 'undefined') {
     return;
   }
-
   voices = speechSynthesis.getVoices();
   console.log("voices", voices);
 }
-
-
 
 document.addEventListener("DOMContentLoaded", app);
