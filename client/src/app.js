@@ -24,6 +24,7 @@ const app = function(){
     console.log("request body", requestBody);
     request.send(JSON.stringify(requestBody));
     createFlag(flag_src);
+
   };
 };
 
@@ -56,6 +57,20 @@ const createFlag = function(flagImage){
   img.src = flagImage;
   img.width = 90;
   div.appendChild(img);
-}
+};
+
+// getting voices can only be done once the onvoiceschanged has happened
+const selectVoice = function (code) {
+  const allVoices = window.speechSynthesis.getVoices();
+  const filteredVoices = allVoices.filter( function (voice) {
+    return voice.lang === code;
+  });
+  console.log(filteredVoices);
+};
+
+
+// end of test code
+
+
 
 document.addEventListener("DOMContentLoaded", app);

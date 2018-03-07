@@ -5,7 +5,7 @@ const phrase_list = require("./phrase_list");
 const translatePhrase = function(phraseToTranslate, language){
   console.log(phraseToTranslate, language);
 
-translate (phraseToTranslate, {to: language}).then(res =>{
+  translate (phraseToTranslate, {to: language}).then(res =>{
     console.log(res.text);
   });
 };
