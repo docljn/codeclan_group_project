@@ -7,6 +7,7 @@ const Request = require("./services/request");
 const app = function(){
   let voices = [];
 
+
   populateVoiceList();
   if (typeof speechSynthesis !== "undefined" && speechSynthesis.onvoiceschanged !== undefined) {
     speechSynthesis.onvoiceschanged = populateVoiceList;
@@ -16,7 +17,7 @@ const app = function(){
 
   const countriesSelectView = new CountriesSelectView(document.querySelector("#countries"));
 
-  const world = new CountryList("https://restcountries.eu/rest/v2/all?fields=name;languages;flag;capital;latlng");
+  const world = new CountryList("https://restcountries.eu/rest/v2/all?fields=name;languages;flag;capital;latlng;alpha2Code");
 
   world.onUpdate = function(countries) {
     countriesSelectView.render(countries);
@@ -24,12 +25,14 @@ const app = function(){
   world.populate();
 
   countriesSelectView.onChange = function(country){
+    console.log(country);
     const languageToTranslateTo = country.languages[0].iso639_1;
     localStorage.setItem("targetLanguage", languageToTranslateTo);
     const flag_src = country.flag;
     const countryCapital = country.capital;
     // const countryLatLng = country.latlng; // needed for local weather alternate api
     const country_alpha2Code = country.alpha2Code;
+    console.log(country_alpha2Code);
     const speechLanguage =  languageToTranslateTo + "-" + country_alpha2Code;
     localStorage.setItem("speechLanguage", speechLanguage);
     console.log("speechLanguage", speechLanguage);
@@ -180,7 +183,7 @@ function populateVoiceList() {
   if(typeof speechSynthesis === "undefined") {
     return;
   }
-  let voices = speechSynthesis.getVoices();
+  voices = speechSynthesis.getVoices();
   console.log("voices", voices);
 }
 const getCustomPhraseButtonClicked = function(){
