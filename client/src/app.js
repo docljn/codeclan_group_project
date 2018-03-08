@@ -45,10 +45,13 @@ const populateBody = function(translatedPhraseArray){
   for (let i=0; i < translatedPhraseArray.data.length; i++){
     const pOrig = document.createElement("p");
     pOrig.innerText = phraseList[i];
+    pOrig.id = "original";
     const pTrans = document.createElement("p");
     pTrans.innerText = translatedPhraseArray.data[i];
+    pTrans.id = "translation";
     div.appendChild(pOrig);
     div.appendChild(pTrans);
+    // div.appendChild(audio);
   }
 };
 
@@ -58,7 +61,7 @@ const createFlag = function(flagImage){
   const img = document.createElement("img");
   console.log(flagImage);
   img.src = flagImage;
-  img.width = 90;
+  img.id = "flag_image";
   div.appendChild(img);
 }
 
