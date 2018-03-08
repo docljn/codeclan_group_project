@@ -3,10 +3,10 @@ const CountryList = require("./models/country_list");
 const phraseList = require("./models/phrase_list");
 const Request = require("./services/request");
 
-
+/* start of app code */
 const app = function(){
+  let voices = [];
 
-  // let voices = [];
   populateVoiceList();
   if (typeof speechSynthesis !== "undefined" && speechSynthesis.onvoiceschanged !== undefined) {
     speechSynthesis.onvoiceschanged = populateVoiceList;
@@ -28,7 +28,6 @@ const app = function(){
     localStorage.setItem("targetLanguage", languageToTranslateTo);
     const flag_src = country.flag;
     const countryCapital = country.capital;
-    console.log(countryCapital);
     // const countryLatLng = country.latlng; // needed for local weather alternate api
     const country_alpha2Code = country.alpha2Code;
     const speechLanguage =  languageToTranslateTo + "-" + country_alpha2Code;
@@ -38,21 +37,21 @@ const app = function(){
     request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     request.onload = requestComplete;
     const requestBody = {language: languageToTranslateTo, phrase: "n/a" };
-    // console.log("request body", requestBody);
     request.send(JSON.stringify(requestBody));
     createFlag(flag_src);
     createWeatherDisplay(countryCapital);
-    // createWeatherDisplay(countryLatLng); // for weather
+    // createWeatherDisplay(countryLatLng); // for alt weatherAPI
     // ** hardcoded phrase at the moment to prove text to speech works **
     speakPhrase("bonjour", speechLanguage);
   };
 };
 
+/* End of app code */
+
 const requestComplete = function(){
   if(this.status !== 200) return;
   const jsonString = this.responseText;
   const translatedPhraseArray = JSON.parse(jsonString);
-  // console.log("output of requestComplete", translatedPhraseArray);
   populateBody(translatedPhraseArray);
 };
 
@@ -88,16 +87,17 @@ const createFlag = function(flagImage){
 };
 
 const createWeatherDisplay = function (city) {
-
+  // THIS IS FOR THE ALTERNATE WEATHER API
   // const createWeatherDisplay = function (latlng) {
   // api.openweathermap.org/data/2.5/weather?q=London,uk
   // api.openweathermap.org/data/2.5/weather?lat=35&lon=139
   // http://api.openweathermap.org/data/2.5/forecast?id=524901&APPID={APIKEY}
-  const openWeatherAPI = {
-    url: "http://api.openweathermap.org/data/2.5/weather?",
-    key: "62b03d8973a50751df56ad8de8a4cc3c"
-  };
+  // const openWeatherAPI = {
+  //   url: "http://api.openweathermap.org/data/2.5/weather?",
+  //   key: "62b03d8973a50751df56ad8de8a4cc3c"
+  // };
   // let completeURL = openWeatherAPI.url + "lat=" + latlng[0] + "&lon=" + latlng[1] + "&APPID=" + openWeatherAPI.key;
+  // Source for url and key commented out to avoid exceding api call limits
   let completeURL = openWeatherAPI.url + "q=" + city + "&APPID=" + openWeatherAPI.key;
 
   makeWeatherRequest(completeURL, sendAPIRequest);
