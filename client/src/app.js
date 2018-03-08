@@ -6,11 +6,16 @@ const Request = require("./services/request");
 
 const app = function(){
 
+  let voices = [];
+  populateVoiceList();
+  if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
+    speechSynthesis.onvoiceschanged = populateVoiceList;
+  }
   const getCustomPhraseButton = document.querySelector("#submit_phrase");
   getCustomPhraseButton.addEventListener('click', getCustomPhraseButtonClicked);
 
   const countriesSelectView = new CountriesSelectView(document.querySelector("#countries"));
-  const world = new CountryList("https://restcountries.eu/rest/v2/all?fields=name;languages;flag");
+  const world = new CountryList("https://restcountries.eu/rest/v2/all?fields=name;languages;flag;alpha2Code");
 
   world.onUpdate = function(countries) {
     countriesSelectView.render(countries);
@@ -21,6 +26,9 @@ const app = function(){
     const languageToTranslateTo = country.languages[0].iso639_1;
     localStorage.setItem("targetLanguage", languageToTranslateTo);
     const flag_src = country.flag;
+    const country_alpha2Code = country.alpha2Code;
+    const speechLanguage =  languageToTranslateTo + "-" + country_alpha2Code;
+    console.log("speechLanguage", speechLanguage);
     const request = new XMLHttpRequest();
     request.open("POST", "/translate_api/");
     request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -29,6 +37,8 @@ const app = function(){
     // console.log("request body", requestBody);
     request.send(JSON.stringify(requestBody));
     createFlag(flag_src);
+    // ** hardcoded phrase at the moment to prove text to speech works **
+    speakPhrase("bonjour", speechLanguage);
   };
 };
 
@@ -69,6 +79,26 @@ const createFlag = function(flagImage){
   div.appendChild(img);
 }
 
+function speakPhrase(phrase, speechLanguage) {
+  let msg = new SpeechSynthesisUtterance();
+  msg.text = phrase;
+  msg.lang = speechLanguage;
+
+  for(let i=0;i<voices.length;i++){
+    if(voices[i].lang==speechLanguage) {
+      msg.voice = voices[i];
+    }
+  };
+  speechSynthesis.speak(msg);
+}
+
+function populateVoiceList() {
+  if(typeof speechSynthesis === 'undefined') {
+    return;
+  }
+  voices = speechSynthesis.getVoices();
+  console.log("voices", voices);
+
 const getCustomPhraseButtonClicked = function(){
   // console.log("Home text buttonclicked");
   const phraseInput = document.getElementById("phrase_input");
@@ -107,11 +137,18 @@ const appendTranslationPair = function(originalPhrase, translatedPhrase){
   const pOrig = document.createElement("p");
   // console.log(phraseToTranslate);
   const pTrans = document.createElement("p");
+
   // console.log(translatedPhrase);
   pOrig.innerText = originalPhrase;
   pTrans.innerText = translatedPhrase;
-  div.appendChild(pOrig);
-  div.appendChild(pTrans);
+  div.prepend(pTrans);
+  div.prepend(pOrig);
+  // div.appendChild(pOrig);
+  // div.appendChild(pTrans);
+  // console.log(translatedPhrase);
+  // pTrans.innerText = translatedPhrase.data;
+  // div.prepend(pTrans);
+  // div.prepend(pOrig);
 }
 
 const mongoRequestComplete = function(){
