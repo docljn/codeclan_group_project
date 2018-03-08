@@ -98,7 +98,7 @@ function populateVoiceList() {
   }
   voices = speechSynthesis.getVoices();
   console.log("voices", voices);
-
+}
 const getCustomPhraseButtonClicked = function(){
   // console.log("Home text buttonclicked");
   const phraseInput = document.getElementById("phrase_input");
@@ -109,7 +109,7 @@ const getCustomPhraseButtonClicked = function(){
   requestPhrase.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
   requestPhrase.onload = requestCompleteSinglePhrase;
   const requestBody = {language: languageCode, phrase: phraseToTranslate};
-  // console.log("request body", requestBody);
+  console.log("request body", requestBody);
   requestPhrase.send(JSON.stringify(requestBody));
 }
 
