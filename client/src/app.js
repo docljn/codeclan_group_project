@@ -3,7 +3,7 @@ const CountryList = require("./models/country_list");
 const phraseList = require("./models/phrase_list");
 const Request = require("./services/request");
 
-
+/* start of app code */
 const app = function(){
   let voices = [];
 
@@ -16,7 +16,7 @@ const app = function(){
 
   const countriesSelectView = new CountriesSelectView(document.querySelector("#countries"));
 
-  const world = new CountryList("https://restcountries.eu/rest/v2/all?fields=name;languages;flag;capital;latlng");
+  const world = new CountryList("https://restcountries.eu/rest/v2/all?fields=name;languages;flag;capital;latlng;alpha2Code");
 
   world.onUpdate = function(countries) {
     countriesSelectView.render(countries);
@@ -24,36 +24,36 @@ const app = function(){
   world.populate();
 
   countriesSelectView.onChange = function(country){
+    console.log(country);
     const languageToTranslateTo = country.languages[0].iso639_1;
     localStorage.setItem("targetLanguage", languageToTranslateTo);
     const flag_src = country.flag;
     const countryCapital = country.capital;
-    console.log(countryCapital);
     // const countryLatLng = country.latlng; // needed for local weather alternate api
     const country_alpha2Code = country.alpha2Code;
+    console.log(country_alpha2Code);
     const speechLanguage =  languageToTranslateTo + "-" + country_alpha2Code;
-    localStorage.setItem("speechLanguage", speechLanguage);
     console.log("speechLanguage", speechLanguage);
     const request = new XMLHttpRequest();
     request.open("POST", "/translate_api/");
     request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     request.onload = requestComplete;
     const requestBody = {language: languageToTranslateTo, phrase: "n/a" };
-    // console.log("request body", requestBody);
     request.send(JSON.stringify(requestBody));
     createFlag(flag_src);
     createWeatherDisplay(countryCapital);
-    // createWeatherDisplay(countryLatLng); // for weather
+    // createWeatherDisplay(countryLatLng); // for alt weatherAPI
     // ** hardcoded phrase at the moment to prove text to speech works **
-    // speakPhrase("bonjour", speechLanguage);
+    speakPhrase("bonjour", speechLanguage);
   };
 };
+
+/* End of app code */
 
 const requestComplete = function(){
   if(this.status !== 200) return;
   const jsonString = this.responseText;
   const translatedPhraseArray = JSON.parse(jsonString);
-  // console.log("output of requestComplete", translatedPhraseArray);
   populateBody(translatedPhraseArray);
 };
 
@@ -89,16 +89,17 @@ const createFlag = function(flagImage){
 };
 
 const createWeatherDisplay = function (city) {
-
+  // THIS IS FOR THE ALTERNATE WEATHER API
   // const createWeatherDisplay = function (latlng) {
   // api.openweathermap.org/data/2.5/weather?q=London,uk
   // api.openweathermap.org/data/2.5/weather?lat=35&lon=139
   // http://api.openweathermap.org/data/2.5/forecast?id=524901&APPID={APIKEY}
-  const openWeatherAPI = {
-    url: "http://api.openweathermap.org/data/2.5/weather?",
-    key: "62b03d8973a50751df56ad8de8a4cc3c"
-  };
+  // const openWeatherAPI = {
+  //   url: "http://api.openweathermap.org/data/2.5/weather?",
+  //   key: "62b03d8973a50751df56ad8de8a4cc3c"
+  // };
   // let completeURL = openWeatherAPI.url + "lat=" + latlng[0] + "&lon=" + latlng[1] + "&APPID=" + openWeatherAPI.key;
+  // Source for url and key commented out to avoid exceding api call limits
   let completeURL = openWeatherAPI.url + "q=" + city + "&APPID=" + openWeatherAPI.key;
 
   makeWeatherRequest(completeURL, sendAPIRequest);
@@ -189,7 +190,6 @@ const getCustomPhraseButtonClicked = function(){
   const phraseToTranslate = phraseInput.value;
   const languageCode = localStorage.getItem("targetLanguage");
   const requestPhrase = new XMLHttpRequest();
-
   requestPhrase.open("POST", "/translate_api/single_phrase/");
   requestPhrase.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
   requestPhrase.onload = requestCompleteSinglePhrase;
@@ -213,8 +213,6 @@ const requestCompleteSinglePhrase = function(){
   // const bodyToSend = {originalPhrase: phraseToTranslate.value, translatedPhrase: translatedPhrase.data };
   console.log("Body to send", bodyToSend);
   mongoRequest.post(mongoRequestComplete, bodyToSend);
-  const speechLanguage = localStorage.getItem("speechLanguage");
-  speakPhrase(translatedPhrase, speechLanguage);
 
   appendTranslationPair(originalPhrase, translatedPhrase);
 };
