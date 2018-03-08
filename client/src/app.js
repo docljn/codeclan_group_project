@@ -35,6 +35,7 @@ const app = function(){
     const speechLanguage =  languageToTranslateTo + "-" + country_alpha2Code;
     console.log("speechLanguage", speechLanguage);
     localStorage.setItem("speechLanguage", speechLanguage);
+    buildPhraseTable(country);
 
     const request = new XMLHttpRequest();
     request.open("POST", "/translate_api/");
@@ -60,26 +61,48 @@ const requestComplete = function(){
 };
 
 const populateBody = function(translatedPhraseArray){
-  const div = document.getElementById("phrases");
-  div.innerText = "";
+  const tableBody = document.getElementById("phrase_table_body");
+  tableBody.innerHTML = "";
 
+  // translatedPhraseArray.forEach(function(phrase, index){
   for (let i=0; i < translatedPhraseArray.data.length; i++){
-    const pOrig = document.createElement("p");
-    pOrig.innerText = phraseList[i];
-    pOrig.id = "original";
-    const pTrans = document.createElement("p");
-    pTrans.innerText = translatedPhraseArray.data[i];
-    pTrans.id = "translation";
-    div.appendChild(pOrig);
-    div.appendChild(pTrans);
-    // div.appendChild(audio);
+    const tableRow = document.createElement("tr");
+    const originalPhrase = document.createElement("th");
+    originalPhrase.innerText = phraseList[i];
+    const translatedPhrase = document.createElement("td");
+    translatedPhrase.innerText = translatedPhraseArray.data[i];
+
+    tableRow.appendChild(originalPhrase);
+    tableRow.appendChild(translatedPhrase);
+    tableBody.appendChild(tableRow);
   }
+  // })
+  // buildPhraseTable(div);
+
+  // for (let i=0; i < translatedPhraseArray.data.length; i++){
+  //   const pOrig = document.createElement("p");
+  //   pOrig.innerText = phraseList[i];
+  //   pOrig.id = "original";
+  //   const pTrans = document.createElement("p");
+  //   pTrans.innerText = translatedPhraseArray.data[i];
+  //   pTrans.id = "translation";
+  //   div.appendChild(pOrig);
+  //   div.appendChild(pTrans);
+  //   // div.appendChild(audio);
+  // }
 
   const languageCode = localStorage.getItem("targetLanguage");
   const requestURL = "http://localhost:3000/phrases/" + languageCode ;
   const mongoRequest = new Request(requestURL);
   mongoRequest.get(getPhraseRequestComplete);
 };
+
+const buildPhraseTable = function(country){
+  const homeLanguage = document.getElementById("home_language");
+  homeLanguage.innerText = "English";
+  const targetLanguage = document.getElementById("target_language");
+  targetLanguage.innerText = country.languages[0].name;
+}
 
 const createFlag = function(flagImage){
   const div = document.getElementById("flag_id");
