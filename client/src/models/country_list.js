@@ -1,6 +1,6 @@
 const languageCodes = require ("../resources/language_codes");
 
-const CountryList = function(url) {
+const CountryList = function(url) { // is it a list?
   this.countries = [];
   this.onUpdate = null;
   this.url = url;
@@ -18,6 +18,7 @@ CountryList.prototype.populate = function(){
       const countries = JSON.parse(jsonString);
       this.countries = countries;
       this.countries.forEach(function(country){
+        //.filter
         if (languageCodes.includes(country.languages[0].iso639_1)){
           filteredCountries.push(country);
         }
