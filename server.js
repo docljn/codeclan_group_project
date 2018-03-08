@@ -40,7 +40,7 @@ app.post("/translate_api/single_phrase/", function (req, expressResponse) {
   const bodyPhrase = req.body.phrase;
   console.log("bodyPhrase", bodyPhrase);
 
-  translate(bodyPhrase, {to: languageToTranslateTo}).then(translateResponse => {
+  translate(bodyPhrase, {from: "en", to: languageToTranslateTo}).then(translateResponse => {
       const aPhrase = translateResponse.text;
       console.log(aPhrase);
       expressResponse.json({data: aPhrase});

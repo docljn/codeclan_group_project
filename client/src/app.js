@@ -34,7 +34,6 @@ const app = function(){
     const country_alpha2Code = country.alpha2Code;
     console.log(country_alpha2Code);
     const speechLanguage =  languageToTranslateTo + "-" + country_alpha2Code;
-    localStorage.setItem("speechLanguage", speechLanguage);
     console.log("speechLanguage", speechLanguage);
     const request = new XMLHttpRequest();
     request.open("POST", "/translate_api/");
@@ -46,7 +45,7 @@ const app = function(){
     createWeatherDisplay(countryCapital);
     // createWeatherDisplay(countryLatLng); // for alt weatherAPI
     // ** hardcoded phrase at the moment to prove text to speech works **
-    // speakPhrase("bonjour", speechLanguage);
+    speakPhrase("bonjour", speechLanguage);
   };
 };
 
@@ -192,7 +191,6 @@ const getCustomPhraseButtonClicked = function(){
   const phraseToTranslate = phraseInput.value;
   const languageCode = localStorage.getItem("targetLanguage");
   const requestPhrase = new XMLHttpRequest();
-
   requestPhrase.open("POST", "/translate_api/single_phrase/");
   requestPhrase.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
   requestPhrase.onload = requestCompleteSinglePhrase;
@@ -216,8 +214,6 @@ const requestCompleteSinglePhrase = function(){
   // const bodyToSend = {originalPhrase: phraseToTranslate.value, translatedPhrase: translatedPhrase.data };
   console.log("Body to send", bodyToSend);
   mongoRequest.post(mongoRequestComplete, bodyToSend);
-  const speechLanguage = localStorage.getItem("speechLanguage");
-  speakPhrase(translatedPhrase, speechLanguage);
 
   appendTranslationPair(originalPhrase, translatedPhrase);
 };
