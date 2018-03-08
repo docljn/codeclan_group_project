@@ -60,19 +60,6 @@ background: url(resised_block_world_map.jpg) repeat-x;
 animation: animate-background linear 15s infinite;
 }
 
-.phrases{
-  font-family: helvetica;
-}
-
-.additional_info{
-  /* position: absolute; */
-  /* bottom: 60px; */
-}
-
-.phrases{
-  margin-left: 10%
-}
-
 @keyframes animate-background {
   from { background-position: 0px; }
   to { background-position: 600px; }
