@@ -31,7 +31,8 @@ const app = function(){
     console.log("request body", requestBody);
     request.send(JSON.stringify(requestBody));
     createFlag(flag_src);
-    createWeatherDisplay(countryLatLng); // for weather
+    createWeatherDisplay(countryCapital);
+    // createWeatherDisplay(countryLatLng); // for weather
   };
 };
 
@@ -65,7 +66,9 @@ const createFlag = function(flagImage){
   div.appendChild(img);
 };
 
-const createWeatherDisplay = function (latlng) {
+const createWeatherDisplay = function (city) {
+
+// const createWeatherDisplay = function (latlng) {
   // api.openweathermap.org/data/2.5/weather?q=London,uk
   // api.openweathermap.org/data/2.5/weather?lat=35&lon=139
   // http://api.openweathermap.org/data/2.5/forecast?id=524901&APPID={APIKEY}
@@ -73,7 +76,9 @@ const createWeatherDisplay = function (latlng) {
     url: "http://api.openweathermap.org/data/2.5/weather?",
     key: "62b03d8973a50751df56ad8de8a4cc3c"
   };
-  let completeURL = openWeatherAPI.url + "lat=" + latlng[0] + "&lon=" + latlng[1] + "&APPID=" + openWeatherAPI.key;
+  // let completeURL = openWeatherAPI.url + "lat=" + latlng[0] + "&lon=" + latlng[1] + "&APPID=" + openWeatherAPI.key;
+  let completeURL = openWeatherAPI.url + "q=" + city + "&APPID=" + openWeatherAPI.key;
+
   makeWeatherRequest(completeURL, sendAPIRequest);
 };
 
