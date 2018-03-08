@@ -10,6 +10,8 @@ const app = function(){
   if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
     speechSynthesis.onvoiceschanged = populateVoiceList;
   }
+  const getCustomPhraseButton = document.querySelector("#submit_phrase");
+  getCustomPhraseButton.addEventListener('click', getCustomPhraseButtonClicked);
 
   const countriesSelectView = new CountriesSelectView(document.querySelector("#countries"));
   const world = new CountryList("https://restcountries.eu/rest/v2/all?fields=name;languages;flag;alpha2Code");
@@ -21,6 +23,7 @@ const app = function(){
 
   countriesSelectView.onChange = function(country){
     const languageToTranslateTo = country.languages[0].iso639_1;
+    localStorage.setItem("targetLanguage", languageToTranslateTo);
     const flag_src = country.flag;
     const country_alpha2Code = country.alpha2Code;
     const speechLanguage =  languageToTranslateTo + "-" + country_alpha2Code;
@@ -29,7 +32,7 @@ const app = function(){
     request.open("POST", "/translate_api/");
     request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     request.onload = requestComplete;
-    const requestBody = {language: languageToTranslateTo};
+    const requestBody = {language: languageToTranslateTo, phrase: "n/a" };
     console.log("request body", requestBody);
     request.send(JSON.stringify(requestBody));
     createFlag(flag_src);
@@ -88,6 +91,40 @@ function populateVoiceList() {
   }
   voices = speechSynthesis.getVoices();
   console.log("voices", voices);
+
+const getCustomPhraseButtonClicked = function(){
+  console.log("Home text buttonclicked");
+  const phraseInput = document.getElementById("phrase_input");
+  const phraseToTranslate = phraseInput.value;
+  const languageCode = localStorage.getItem("targetLanguage");
+  const requestPhrase = new XMLHttpRequest();
+  requestPhrase.open("POST", "/translate_api/single_phrase/");
+  requestPhrase.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  requestPhrase.onload = requestCompleteSinglePhrase;
+  const requestBody = {language: languageCode, phrase: phraseToTranslate};
+  console.log("request body", requestBody);
+  requestPhrase.send(JSON.stringify(requestBody));
+}
+
+const requestCompleteSinglePhrase = function(){
+  if(this.status !== 200) return;
+  const jsonString = this.responseText;
+  const translatedPhrase = JSON.parse(jsonString);
+  console.log("output of requestComplete", translatedPhrase);
+  appendNewTranslation(translatedPhrase);
+};
+
+const appendNewTranslation = function(translatedPhrase){
+  const div = document.getElementById("phrases");
+  const pOrig = document.createElement("p");
+  const phraseToTranslate = document.getElementById("phrase_input");
+  pOrig.innerText = phraseToTranslate.value;
+  console.log(phraseToTranslate);
+  const pTrans = document.createElement("p");
+  console.log(translatedPhrase);
+  pTrans.innerText = translatedPhrase.data;
+  div.prepend(pTrans);
+  div.prepend(pOrig);
 }
 
 document.addEventListener("DOMContentLoaded", app);
