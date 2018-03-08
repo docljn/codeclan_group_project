@@ -17,7 +17,7 @@ InputForm.prototype.create = function () {
   textInput.placeholderText = "Enter your own phrase for translation";
 
   submitButton.id = "translate-phrase-button";
-  // submitButton.name = "Translate Phrase";
+  submitButton.name = "Translate Phrase";
   submitButton.innerText = "Translate Phrase";
   inputForm.appendChild(textInput);
   inputForm.appendChild(submitButton);
