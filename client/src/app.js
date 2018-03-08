@@ -5,8 +5,8 @@ const Request = require("./services/request");
 
 
 const app = function(){
+  let voices = [];
 
-  // let voices = [];
   populateVoiceList();
   if (typeof speechSynthesis !== "undefined" && speechSynthesis.onvoiceschanged !== undefined) {
     speechSynthesis.onvoiceschanged = populateVoiceList;
@@ -180,7 +180,7 @@ function populateVoiceList() {
   if(typeof speechSynthesis === "undefined") {
     return;
   }
-  let voices = speechSynthesis.getVoices();
+  voices = speechSynthesis.getVoices();
   console.log("voices", voices);
 }
 const getCustomPhraseButtonClicked = function(){
