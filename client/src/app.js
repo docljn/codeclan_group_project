@@ -11,6 +11,7 @@ const app = function(){
   if (typeof speechSynthesis !== "undefined" && speechSynthesis.onvoiceschanged !== undefined) {
     speechSynthesis.onvoiceschanged = populateVoiceList;
   }
+
   const getCustomPhraseButton = document.querySelector("#submit_phrase");
   getCustomPhraseButton.addEventListener("click", getCustomPhraseButtonClicked);
 
@@ -245,18 +246,30 @@ const requestCompleteSinglePhrase = function(){
 };
 
 const appendTranslationPair = function(originalPhrase, translatedPhrase){
-  const div = document.getElementById("phrases");
-  const pOrig = document.createElement("p");
-  // console.log(phraseToTranslate);
-  const pTrans = document.createElement("p");
+  // const div = document.getElementById("phrases");
+  // const pOrig = document.createElement("p");
+  // // console.log(phraseToTranslate);
+  // const pTrans = document.createElement("p");
+  const tableBody = document.getElementById("phrase_table_body");
 
-  // console.log(translatedPhrase);
-  pOrig.innerText = originalPhrase;
-  pOrig.id = "original";
-  pTrans.innerText = translatedPhrase;
-  pTrans.id = "translation";
-  div.prepend(pTrans);
-  div.prepend(pOrig);
+  const tableRow = document.createElement("tr");
+  const originalPhraseTag = document.createElement("th");
+  originalPhraseTag.innerText = originalPhrase;
+  const translatedPhraseTag = document.createElement("td");
+  translatedPhraseTag.innerText = translatedPhrase;
+
+  tableRow.appendChild(originalPhraseTag);
+  tableRow.appendChild(translatedPhraseTag);
+  tableBody.appendChild(tableRow);
+
+
+  // // console.log(translatedPhrase);
+  // pOrig.innerText = originalPhrase;
+  // pOrig.id = "original";
+  // pTrans.innerText = translatedPhrase;
+  // pTrans.id = "translation";
+  // div.prepend(pTrans);
+  // div.prepend(pOrig);
 
 };
 
