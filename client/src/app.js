@@ -25,25 +25,26 @@ const app = function(){
   world.populate();
 
   countriesSelectView.onChange = function(country){
-    console.log(country);
-    const languageToTranslateTo = country.languages[0].iso639_1;
-    localStorage.setItem("targetLanguage", languageToTranslateTo);
+    // console.log(country);
+    const targetLanguageCode = country.languages[0].iso639_1;
+    localStorage.setItem("targetLanguage", targetLanguageCode);
     const flag_src = country.flag;
     const countryCapital = country.capital;
     // const countryLatLng = country.latlng; // needed for local weather alternate api
     const country_alpha2Code = country.alpha2Code;
-    console.log(country_alpha2Code);
-    const speechLanguage =  languageToTranslateTo + "-" + country_alpha2Code;
-    console.log("speechLanguage", speechLanguage);
+    // console.log(country_alpha2Code);
+    const speechLanguage =  targetLanguageCode + "-" + country_alpha2Code;
+    // console.log("speechLanguage", speechLanguage);
     localStorage.setItem("speechLanguage", speechLanguage);
+    const tableBody = document.getElementById("phrase_table_body");
+    tableBody.innerText = "";
     buildPhraseTable(country);
 
-    const request = new XMLHttpRequest();
-    request.open("POST", "/translate_api/");
-    request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    request.onload = requestComplete;
-    const requestBody = {language: languageToTranslateTo, phrase: "n/a" };
-    request.send(JSON.stringify(requestBody));
+    // see if there is  db entry for this languageCode
+    const requestURL = "http://localhost:3000/phrases/" + targetLanguageCode ;
+    const mongoRequest = new Request(requestURL);
+    mongoRequest.get(languagePresentRequestComplete);
+
     createFlag(flag_src);
     createWeatherDisplay(countryCapital);
     // createWeatherDisplay(countryLatLng); // for alt weatherAPI
@@ -52,50 +53,41 @@ const app = function(){
   };
 };
 
+const languagePresentRequestComplete = function(allPhrases){
+
+  console.log(allPhrases.length);
+  if (allPhrases.length === 0){
+    const targetLanguageCode = localStorage.getItem("targetLanguage");
+    const request = new XMLHttpRequest();
+    request.open("POST", "/translate_api/");
+    request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    request.onload = translateRequestComplete;
+    const requestBody = {language: targetLanguageCode, phrase: "n/a" };
+    request.send(JSON.stringify(requestBody));
+  } else {
+    for (let i=0; i < allPhrases.length; i++){
+      const originalPhrase = allPhrases[i].originalPhrase;
+      const translatedPhrase = allPhrases[i].translatedPhrase;
+      appendTranslationPair (originalPhrase, translatedPhrase);
+    }
+  }
+}
+
 /* End of app code */
 
-const requestComplete = function(){
+const translateRequestComplete = function(){
   if(this.status !== 200) return;
   const jsonString = this.responseText;
   const translatedPhraseArray = JSON.parse(jsonString);
-  populateBody(translatedPhraseArray);
-};
 
-const populateBody = function(translatedPhraseArray){
-  const tableBody = document.getElementById("phrase_table_body");
-  tableBody.innerHTML = "";
-
-  // translatedPhraseArray.forEach(function(phrase, index){
   for (let i=0; i < translatedPhraseArray.data.length; i++){
-    const tableRow = document.createElement("tr");
-    const originalPhrase = document.createElement("th");
-    originalPhrase.innerText = phraseList[i];
-    const translatedPhrase = document.createElement("td");
-    translatedPhrase.innerText = translatedPhraseArray.data[i];
 
-    tableRow.appendChild(originalPhrase);
-    tableRow.appendChild(translatedPhrase);
-    tableBody.appendChild(tableRow);
+    const originalPhrase = phraseList[i];
+    console.log("originalPhrase", originalPhrase);
+    const translatedPhrase = translatedPhraseArray.data[i];
+    console.log("translatedPhrase", translatedPhrase);
+    savePhrasePair(originalPhrase, translatedPhrase);
   }
-  // })
-  // buildPhraseTable(div);
-
-  // for (let i=0; i < translatedPhraseArray.data.length; i++){
-  //   const pOrig = document.createElement("p");
-  //   pOrig.innerText = phraseList[i];
-  //   pOrig.id = "original";
-  //   const pTrans = document.createElement("p");
-  //   pTrans.innerText = translatedPhraseArray.data[i];
-  //   pTrans.id = "translation";
-  //   div.appendChild(pOrig);
-  //   div.appendChild(pTrans);
-  //   // div.appendChild(audio);
-  // }
-
-  const languageCode = localStorage.getItem("targetLanguage");
-  const requestURL = "http://localhost:3000/phrases/" + languageCode ;
-  const mongoRequest = new Request(requestURL);
-  mongoRequest.get(getPhraseRequestComplete);
 };
 
 const buildPhraseTable = function(country){
@@ -189,7 +181,6 @@ const buildWeatherHtml = function (weatherObject) {
 };
 
 
-
 function speakPhrase(phrase, speechLanguage) {
   let msg = new SpeechSynthesisUtterance();
   msg.text = phrase;
@@ -208,19 +199,21 @@ function populateVoiceList() {
     return;
   }
   voices = speechSynthesis.getVoices();
-  console.log("voices", voices);
+  // console.log("voices", voices);
 }
+
 const getCustomPhraseButtonClicked = function(){
   // console.log("Home text buttonclicked");
   const phraseInput = document.getElementById("phrase_input");
   const phraseToTranslate = phraseInput.value;
   const languageCode = localStorage.getItem("targetLanguage");
+
   const requestPhrase = new XMLHttpRequest();
   requestPhrase.open("POST", "/translate_api/single_phrase/");
   requestPhrase.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
   requestPhrase.onload = requestCompleteSinglePhrase;
   const requestBody = {language: languageCode, phrase: phraseToTranslate};
-  console.log("request body", requestBody);
+  // console.log("request body", requestBody);
   requestPhrase.send(JSON.stringify(requestBody));
 };
 
@@ -228,28 +221,31 @@ const requestCompleteSinglePhrase = function(){
   if(this.status !== 200) return;
   const jsonString = this.responseText;
   const translatedPhrase = JSON.parse(jsonString).data;
-  console.log("translated phrase", translatedPhrase);
+  // console.log("translated phrase", translatedPhrase);
   const originalPhrase = document.getElementById("phrase_input").value;
   // console.log("output of requestComplete", translatedPhrase);
-  const languageCode = localStorage.getItem("targetLanguage");
   const speechLanguage  = localStorage.getItem("speechLanguage");
   speakPhrase(translatedPhrase, speechLanguage)
+
+  savePhrasePair(originalPhrase, translatedPhrase);
+};
+
+const savePhrasePair = function(originalPhrase, translatedPhrase){
+
+  const languageCode = localStorage.getItem("targetLanguage");
+
   const requestURL = "http://localhost:3000/phrases/" + languageCode ;
-  console.log("RequestURL", requestURL);
+  // console.log("RequestURL", requestURL);
   const mongoRequest = new Request(requestURL);
   const bodyToSend = {originalPhrase: originalPhrase, translatedPhrase: translatedPhrase };
-  // const bodyToSend = {originalPhrase: phraseToTranslate.value, translatedPhrase: translatedPhrase.data };
-  console.log("Body to send", bodyToSend);
+  // console.log("Body to send", bodyToSend);
   mongoRequest.post(mongoRequestComplete, bodyToSend);
 
   appendTranslationPair(originalPhrase, translatedPhrase);
 };
 
+
 const appendTranslationPair = function(originalPhrase, translatedPhrase){
-  // const div = document.getElementById("phrases");
-  // const pOrig = document.createElement("p");
-  // // console.log(phraseToTranslate);
-  // const pTrans = document.createElement("p");
   const tableBody = document.getElementById("phrase_table_body");
 
   const tableRow = document.createElement("tr");
@@ -262,15 +258,6 @@ const appendTranslationPair = function(originalPhrase, translatedPhrase){
   tableRow.appendChild(translatedPhraseTag);
   tableBody.appendChild(tableRow);
 
-
-  // // console.log(translatedPhrase);
-  // pOrig.innerText = originalPhrase;
-  // pOrig.id = "original";
-  // pTrans.innerText = translatedPhrase;
-  // pTrans.id = "translation";
-  // div.prepend(pTrans);
-  // div.prepend(pOrig);
-
 };
 
 const mongoRequestComplete = function(){
@@ -280,10 +267,10 @@ const mongoRequestComplete = function(){
 const getPhraseRequestComplete = function(allPhrases){
   console.log(allPhrases);
   allPhrases.forEach(function(phrasePair){
-    console.log("phrasePair", phrasePair);
+    // console.log("phrasePair", phrasePair);
     const originalPhrase = phrasePair.originalPhrase;
     const translatedPhrase = phrasePair.translatedPhrase;
-    console.log("translatedPhrase", translatedPhrase);
+    // console.log("translatedPhrase", translatedPhrase);
     appendTranslationPair(originalPhrase, translatedPhrase);
   });
 };
