@@ -6,16 +6,17 @@ const Request = require("./services/request");
 
 const app = function(){
 
-  let voices = [];
+  // let voices = [];
   populateVoiceList();
-  if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
+  if (typeof speechSynthesis !== "undefined" && speechSynthesis.onvoiceschanged !== undefined) {
     speechSynthesis.onvoiceschanged = populateVoiceList;
   }
   const getCustomPhraseButton = document.querySelector("#submit_phrase");
-  getCustomPhraseButton.addEventListener('click', getCustomPhraseButtonClicked);
+  getCustomPhraseButton.addEventListener("click", getCustomPhraseButtonClicked);
 
   const countriesSelectView = new CountriesSelectView(document.querySelector("#countries"));
-  const world = new CountryList("https://restcountries.eu/rest/v2/all?fields=name;languages;flag;alpha2Code");
+
+  const world = new CountryList("https://restcountries.eu/rest/v2/all?fields=name;languages;flag;capital;latlng");
 
   world.onUpdate = function(countries) {
     countriesSelectView.render(countries);
@@ -26,6 +27,9 @@ const app = function(){
     const languageToTranslateTo = country.languages[0].iso639_1;
     localStorage.setItem("targetLanguage", languageToTranslateTo);
     const flag_src = country.flag;
+    const countryCapital = country.capital;
+    console.log(countryCapital);
+    // const countryLatLng = country.latlng; // needed for local weather alternate api
     const country_alpha2Code = country.alpha2Code;
     const speechLanguage =  languageToTranslateTo + "-" + country_alpha2Code;
     localStorage.setItem("speechLanguage", speechLanguage);
@@ -38,6 +42,8 @@ const app = function(){
     // console.log("request body", requestBody);
     request.send(JSON.stringify(requestBody));
     createFlag(flag_src);
+    createWeatherDisplay(countryCapital);
+    // createWeatherDisplay(countryLatLng); // for weather
     // ** hardcoded phrase at the moment to prove text to speech works **
     // speakPhrase("bonjour", speechLanguage);
   };
@@ -58,10 +64,13 @@ const populateBody = function(translatedPhraseArray){
   for (let i=0; i < translatedPhraseArray.data.length; i++){
     const pOrig = document.createElement("p");
     pOrig.innerText = phraseList[i];
+    pOrig.id = "original";
     const pTrans = document.createElement("p");
     pTrans.innerText = translatedPhraseArray.data[i];
+    pTrans.id = "translation";
     div.appendChild(pOrig);
     div.appendChild(pTrans);
+    // div.appendChild(audio);
   }
 
   const languageCode = localStorage.getItem("targetLanguage");
@@ -74,11 +83,85 @@ const createFlag = function(flagImage){
   const div = document.getElementById("flag_id");
   div.innerHTML = "";
   const img = document.createElement("img");
-  // console.log(flagImage);
   img.src = flagImage;
-  img.width = 90;
+  img.id = "flag_image";
   div.appendChild(img);
-}
+};
+
+const createWeatherDisplay = function (city) {
+
+  // const createWeatherDisplay = function (latlng) {
+  // api.openweathermap.org/data/2.5/weather?q=London,uk
+  // api.openweathermap.org/data/2.5/weather?lat=35&lon=139
+  // http://api.openweathermap.org/data/2.5/forecast?id=524901&APPID={APIKEY}
+  const openWeatherAPI = {
+    url: "http://api.openweathermap.org/data/2.5/weather?",
+    key: "62b03d8973a50751df56ad8de8a4cc3c"
+  };
+  // let completeURL = openWeatherAPI.url + "lat=" + latlng[0] + "&lon=" + latlng[1] + "&APPID=" + openWeatherAPI.key;
+  let completeURL = openWeatherAPI.url + "q=" + city + "&APPID=" + openWeatherAPI.key;
+
+  makeWeatherRequest(completeURL, sendAPIRequest);
+};
+
+const makeWeatherRequest = function (url, callback) {
+  const request = new XMLHttpRequest();
+  request.open("GET", url);
+  request.addEventListener("load", callback);
+  request.send();
+};
+
+const sendAPIRequest = function () {
+  if(this.status !== 200) {
+    clearWeatherHtml();
+    return;
+  }
+  const jsonString = this.responseText;
+  const weatherObject = JSON.parse(jsonString);
+  buildWeatherHtml(weatherObject);
+};
+
+const clearWeatherHtml = function () {
+  const weatherDiv = document.getElementById("weather");
+  weatherDiv.innerHTML = "";
+};
+
+const buildWeatherHtml = function (weatherObject) {
+  console.log(weatherObject);
+  const weatherDiv = document.getElementById("weather");
+  weatherDiv.innerHTML = "";
+
+  const nearestWeatherStation = weatherObject.name;
+
+  const weatherDescription =  weatherObject.weather[0].description;
+
+  const weatherIconSource = "http://openweathermap.org/themes/openweathermap/assets/vendor/owm/img/widgets/" + weatherObject.weather[0].icon + ".png";
+
+  const currentTemperature = Math.round(weatherObject.main.temp-273);
+  const htmlDegrees = "℃";
+
+  // make html elements needed
+  const stationHeading = document.createElement("h3");
+  stationHeading.innerText = "Weather in " + nearestWeatherStation;
+
+  const weatherUL = document.createElement("ul");
+
+  const icon = document.createElement("img");
+  icon.src = weatherIconSource;
+  icon.id = "weather_icon";
+
+  const liTemp = document.createElement("li");
+  liTemp.innerText = currentTemperature + htmlDegrees + ": " + weatherDescription;
+
+  weatherUL.appendChild(icon);
+  weatherUL.appendChild(liTemp);
+
+  weatherDiv.appendChild(stationHeading);
+  weatherDiv.appendChild(weatherUL);
+
+};
+
+
 
 function speakPhrase(phrase, speechLanguage) {
   let msg = new SpeechSynthesisUtterance();
@@ -89,15 +172,15 @@ function speakPhrase(phrase, speechLanguage) {
     if(voices[i].lang==speechLanguage) {
       msg.voice = voices[i];
     }
-  };
+  }
   speechSynthesis.speak(msg);
 }
 
 function populateVoiceList() {
-  if(typeof speechSynthesis === 'undefined') {
+  if(typeof speechSynthesis === "undefined") {
     return;
   }
-  voices = speechSynthesis.getVoices();
+  let voices = speechSynthesis.getVoices();
   console.log("voices", voices);
 }
 const getCustomPhraseButtonClicked = function(){
@@ -113,7 +196,7 @@ const getCustomPhraseButtonClicked = function(){
   const requestBody = {language: languageCode, phrase: phraseToTranslate};
   console.log("request body", requestBody);
   requestPhrase.send(JSON.stringify(requestBody));
-}
+};
 
 const requestCompleteSinglePhrase = function(){
   if(this.status !== 200) return;
@@ -144,20 +227,17 @@ const appendTranslationPair = function(originalPhrase, translatedPhrase){
 
   // console.log(translatedPhrase);
   pOrig.innerText = originalPhrase;
+  pOrig.id = "original";
   pTrans.innerText = translatedPhrase;
+  pTrans.id = "translation";
   div.prepend(pTrans);
   div.prepend(pOrig);
-  // div.appendChild(pOrig);
-  // div.appendChild(pTrans);
-  // console.log(translatedPhrase);
-  // pTrans.innerText = translatedPhrase.data;
-  // div.prepend(pTrans);
-  // div.prepend(pOrig);
-}
+
+};
 
 const mongoRequestComplete = function(){
   console.log("mongo post complete");
-}
+};
 
 const getPhraseRequestComplete = function(allPhrases){
   console.log(allPhrases);
@@ -167,7 +247,7 @@ const getPhraseRequestComplete = function(allPhrases){
     const translatedPhrase = phrasePair.translatedPhrase;
     console.log("translatedPhrase", translatedPhrase);
     appendTranslationPair(originalPhrase, translatedPhrase);
-  })
-}
+  });
+};
 
 document.addEventListener("DOMContentLoaded", app);

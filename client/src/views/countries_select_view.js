@@ -3,7 +3,7 @@ const CountrySelectView = function(selectElement) {
   this.onChange = undefined;
   this.countries = [];
   this.filteredCountries = [];
-  this.selectElement.addEventListener('change', function (e) {
+  this.selectElement.addEventListener("change", function (e) {
     const target = e.target;
     const index = target.selectedIndex;
     const country = this.countries[index];
@@ -18,13 +18,13 @@ CountrySelectView.prototype.render = function(filteredCountries){
     country.index = index;
     this.addOption(country, index);
   }.bind(this));
-}
+};
 
 CountrySelectView.prototype.addOption = function(country, index){
   const option = document.createElement("option");
   option.value = index;
   option.text = country.name + " - " + country.languages[0].name;
   this.selectElement.appendChild(option);
-}
+};
 
 module.exports = CountrySelectView;

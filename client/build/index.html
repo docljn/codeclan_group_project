@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>TravelApp</title>
     <link rel='stylesheet' type='text/css' href='main.css'>
+    <link rel="stylesheet" type="text/css" href="flash_cards.css">
     <script src='bundle.js'></script>
 
     <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
@@ -11,11 +12,21 @@
   </head>
 
   <body>
-    <main>
-
-      <div class="page_header" id="banner">
+    <header class="page_header" id="banner">
         <h1>traveLingo</h1>
+    </header>
+
+    <aside class="additional_info flex">
+      <div id="flag_id" class="flag">
+
       </div>
+      <div id="weather">
+
+      </div>
+
+    </aside>
+
+    <main>
 
       <input type="text" id="phrase_input">
       <button type="button" name="submitButton" id="submit_phrase">submit</button>
@@ -25,19 +36,13 @@
       <select id="countries">
 
       </select>
-      <div id="flag_id" class="flag">
 
-      </div>
 
       <div class="phrases" id="phrases">
 
       </div>
 
     </main>
-
-    <aside class="additional_info">
-      
-    </aside>
 
 
   </body>
