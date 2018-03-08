@@ -241,9 +241,9 @@ const requestCompleteSinglePhrase = function(){
   // const bodyToSend = {originalPhrase: phraseToTranslate.value, translatedPhrase: translatedPhrase.data };
   console.log("Body to send", bodyToSend);
   mongoRequest.post(mongoRequestComplete, bodyToSend);
-
   appendTranslationPair(originalPhrase, translatedPhrase);
 };
+
 
 const appendTranslationPair = function(originalPhrase, translatedPhrase){
   // const div = document.getElementById("phrases");
@@ -256,6 +256,8 @@ const appendTranslationPair = function(originalPhrase, translatedPhrase){
   const originalPhraseTag = document.createElement("th");
   originalPhraseTag.innerText = originalPhrase;
   const translatedPhraseTag = document.createElement("td");
+  const languageCode = localStorage.getItem("targetLanguage");
+  translatedPhraseTag.setAttribute('lang', languageCode);
   translatedPhraseTag.innerText = translatedPhrase;
 
   tableRow.appendChild(originalPhraseTag);
