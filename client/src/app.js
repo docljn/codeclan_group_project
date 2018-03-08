@@ -34,6 +34,8 @@ const app = function(){
     console.log(country_alpha2Code);
     const speechLanguage =  languageToTranslateTo + "-" + country_alpha2Code;
     console.log("speechLanguage", speechLanguage);
+    localStorage.setItem("speechLanguage", speechLanguage);
+
     const request = new XMLHttpRequest();
     request.open("POST", "/translate_api/");
     request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -206,6 +208,8 @@ const requestCompleteSinglePhrase = function(){
   const originalPhrase = document.getElementById("phrase_input").value;
   // console.log("output of requestComplete", translatedPhrase);
   const languageCode = localStorage.getItem("targetLanguage");
+  const speechLanguage  = localStorage.getItem("speechLanguage");
+  speakPhrase(translatedPhrase, speechLanguage)
   const requestURL = "http://localhost:3000/phrases/" + languageCode ;
   console.log("RequestURL", requestURL);
   const mongoRequest = new Request(requestURL);
