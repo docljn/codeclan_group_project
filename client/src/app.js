@@ -20,8 +20,9 @@ const app = function(){
     const languageToTranslateTo = country.languages[0].iso639_1;
     localStorage.setItem("targetLanguage", languageToTranslateTo);
     const flag_src = country.flag;
+    const countryCapital = country.capital;
+    console.log(countryCapital);
     const countryLatLng = country.latlng; // needed for local weather
-    console.log(countryLatLng);
     const request = new XMLHttpRequest();
     request.open("POST", "/translate_api/");
     request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -30,7 +31,6 @@ const app = function(){
     console.log("request body", requestBody);
     request.send(JSON.stringify(requestBody));
     createFlag(flag_src);
-    // createCapitalDisplay(capitalCity);  // for weather
     createWeatherDisplay(countryLatLng); // for weather
   };
 };
@@ -66,11 +66,14 @@ const createFlag = function(flagImage){
 };
 
 const createWeatherDisplay = function (latlng) {
-  const airQualityAPI = {
-    url: "https://api.airvisual.com/v2/",
-    key: "GLJGqzbnNkn4rNLXf"
+  // api.openweathermap.org/data/2.5/weather?q=London,uk
+  // api.openweathermap.org/data/2.5/weather?lat=35&lon=139
+  // http://api.openweathermap.org/data/2.5/forecast?id=524901&APPID={APIKEY}
+  const openWeatherAPI = {
+    url: "http://api.openweathermap.org/data/2.5/weather?",
+    key: "62b03d8973a50751df56ad8de8a4cc3c"
   };
-  let completeURL = airQualityAPI.url + "nearest_city?" + "lat=" + latlng[0] + "&lon=" + latlng[1] + "&key=" + airQualityAPI.key;
+  let completeURL = openWeatherAPI.url + "lat=" + latlng[0] + "&lon=" + latlng[1] + "&APPID=" + openWeatherAPI.key;
   makeWeatherRequest(completeURL, sendAPIRequest);
 };
 
@@ -97,15 +100,17 @@ const clearWeatherHtml = function () {
 };
 
 const buildWeatherHtml = function (weatherObject) {
+  console.log(weatherObject);
   const weatherDiv = document.getElementById("weather");
   weatherDiv.innerHTML = "";
 
-  const nearestWeatherStation = weatherObject.data.city + ", " + weatherObject.data.country;
+  const nearestWeatherStation = weatherObject.name;
 
-  const weatherData =  weatherObject.data.current.weather;
+  const weatherDescription =  weatherObject.weather[0].description;
 
-  const weatherIconSource = "https://airvisual.com/images/" + weatherData.ic + ".png";
-  const currentTemperature = weatherData.tp;
+  const weatherIconSource = "http://openweathermap.org/themes/openweathermap/assets/vendor/owm/img/widgets/" + weatherObject.weather[0].icon + ".png";
+
+  const currentTemperature = Math.round(weatherObject.main.temp-273);
   const htmlDegrees = "℃";
 
   // make html elements needed
@@ -122,7 +127,7 @@ const buildWeatherHtml = function (weatherObject) {
   liStation.innerText = nearestWeatherStation;
 
   const liTemp = document.createElement("li");
-  liTemp.innerText = currentTemperature + htmlDegrees;
+  liTemp.innerText = currentTemperature + htmlDegrees + ": " + weatherDescription;
 
   weatherUL.appendChild(icon);
   weatherUL.appendChild(liTemp);
