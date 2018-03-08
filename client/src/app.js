@@ -120,23 +120,19 @@ const buildWeatherHtml = function (weatherObject) {
 
   // make html elements needed
   const stationHeading = document.createElement("h3");
-  stationHeading.innerText = "Nearest Weather Station";
+  stationHeading.innerText = "Weather in " + nearestWeatherStation;
 
   const weatherUL = document.createElement("ul");
 
   const icon = document.createElement("img");
   icon.src = weatherIconSource;
-  icon.width = "50";
-
-  const liStation = document.createElement("li");
-  liStation.innerText = nearestWeatherStation;
+  icon.id = "weather_icon";
 
   const liTemp = document.createElement("li");
   liTemp.innerText = currentTemperature + htmlDegrees + ": " + weatherDescription;
 
   weatherUL.appendChild(icon);
   weatherUL.appendChild(liTemp);
-  weatherUL.appendChild(liStation);
 
   weatherDiv.appendChild(stationHeading);
   weatherDiv.appendChild(weatherUL);
