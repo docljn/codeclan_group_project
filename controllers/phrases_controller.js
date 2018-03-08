@@ -12,16 +12,19 @@ MongoClient.connect(url, function(err, client){
     const languageCode = req.params.languageCode;
     const collection = db.collection(languageCode);
     collection.find({}).toArray(function(err, docs){
+      console.log("docs", docs);
       res.json(docs);
     })
   })
 
   // Create one phrase for language code
   phrasesRouter.post("/phrases/:languageCode", function(req, res){
-
+    // console.log("req lang code in post", req.params.languageCode);
+    // console.log("req body translated phrase", req.body.translatedPhrase);
+    // console.log("req body original phrase", req.body.originalPhrase);
     const languageCode = req.params.languageCode;
     const collection = db.collection(languageCode);
-    collection.insert({phrase: req.body.phrase});
+    collection.insert({originalPhrase: req.body.originalPhrase, translatedPhrase: req.body.translatedPhrase});
     res.status(201);
     res.send();
   })
