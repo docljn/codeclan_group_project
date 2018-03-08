@@ -145,7 +145,7 @@ const appendTranslationPair = function(originalPhrase, translatedPhrase){
   pOrig.innerText = originalPhrase;
   pOrig.id = "original";
   pTrans.innerText = translatedPhrase;
-  pTrans.id = "original";
+  pTrans.id = "translation";
   div.prepend(pTrans);
   div.prepend(pOrig);
   // div.appendChild(pOrig);
