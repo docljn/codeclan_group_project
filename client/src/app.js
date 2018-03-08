@@ -2,7 +2,7 @@ const CountriesSelectView = require("./views/countries_select_view");
 const CountryList = require("./models/country_list");
 const phraseList = require("./models/phrase_list");
 const Request = require("./services/request");
-const InputPhrase = require("./models/input_phrase");
+const InputForm = require("./models/input_form");
 
 
 const app = function(){
@@ -12,15 +12,15 @@ const app = function(){
   if (typeof speechSynthesis !== "undefined" && speechSynthesis.onvoiceschanged !== undefined) {
     speechSynthesis.onvoiceschanged = populateVoiceList;
   }
-  const getCustomPhraseButton = document.querySelector("#submit_phrase");
-  getCustomPhraseButton.addEventListener("click", getCustomPhraseButtonClicked);
+  // NB: This button is now created dynamically
+  // const getCustomPhraseButton = document.querySelector("#submit_phrase");
+  // getCustomPhraseButton.addEventListener("click", getCustomPhraseButtonClicked);
 
   const countriesSelectView = new CountriesSelectView(document.querySelector("#countries"));
 
 
   const world = new CountryList("https://restcountries.eu/rest/v2/all?fields=name;languages;flag;capital;latlng");
 
-  const inputPhrase = new InputPhrase();
 
   world.onUpdate = function(countries) {
     countriesSelectView.render(countries);
@@ -44,12 +44,20 @@ const app = function(){
     const requestBody = {language: languageToTranslateTo, phrase: "n/a" };
     // console.log("request body", requestBody);
     request.send(JSON.stringify(requestBody));
+    const inputForm = new InputForm;
+    inputForm.create()
+    // createInputForm();
     createFlag(flag_src);
     createWeatherDisplay(countryCapital);
     // createWeatherDisplay(countryLatLng); // for weather
     // ** hardcoded phrase at the moment to prove text to speech works **
     speakPhrase("bonjour", speechLanguage);
     // inputPhrase.create();
+    // create form with text input box for custom phrase
+
+
+    // const customPhraseInputForm = new InputForm();
+    // customPhraseInputForm.create();
   };
 };
 
@@ -131,7 +139,7 @@ const clearWeatherHtml = function () {
 };
 
 const buildWeatherHtml = function (weatherObject) {
-  console.log(weatherObject);
+  // console.log(weatherObject);
   const weatherDiv = document.getElementById("weather");
   weatherDiv.innerHTML = "";
 
@@ -185,36 +193,25 @@ function populateVoiceList() {
     return;
   }
   let voices = speechSynthesis.getVoices();
-  console.log("voices", voices);
+  // console.log("voices", voices);
 }
-const getCustomPhraseButtonClicked = function(){
-  // console.log("Home text buttonclicked");
-  const phraseInput = document.getElementById("phrase_input");
-  const phraseToTranslate = phraseInput.value;
-  const languageCode = localStorage.getItem("targetLanguage");
-  const requestPhrase = new XMLHttpRequest();
-  requestPhrase.open("POST", "/translate_api/single_phrase/");
-  requestPhrase.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-  requestPhrase.onload = requestCompleteSinglePhrase;
-  const requestBody = {language: languageCode, phrase: phraseToTranslate};
-  console.log("request body", requestBody);
-  requestPhrase.send(JSON.stringify(requestBody));
-};
+
+
 
 const requestCompleteSinglePhrase = function(){
   if(this.status !== 200) return;
   const jsonString = this.responseText;
   const translatedPhrase = JSON.parse(jsonString).data;
-  console.log("translated phrase", translatedPhrase);
+  // console.log("translated phrase", translatedPhrase);
   const originalPhrase = document.getElementById("phrase_input").value;
   // console.log("output of requestComplete", translatedPhrase);
   const languageCode = localStorage.getItem("targetLanguage");
   const requestURL = "http://localhost:3000/phrases/" + languageCode ;
-  console.log("RequestURL", requestURL);
+  // console.log("RequestURL", requestURL);
   const mongoRequest = new Request(requestURL);
   const bodyToSend = {originalPhrase: originalPhrase, translatedPhrase: translatedPhrase };
   // const bodyToSend = {originalPhrase: phraseToTranslate.value, translatedPhrase: translatedPhrase.data };
-  console.log("Body to send", bodyToSend);
+  // console.log("Body to send", bodyToSend);
   mongoRequest.post(mongoRequestComplete, bodyToSend);
 
   appendTranslationPair(originalPhrase, translatedPhrase);
@@ -237,16 +234,16 @@ const appendTranslationPair = function(originalPhrase, translatedPhrase){
 };
 
 const mongoRequestComplete = function(){
-  console.log("mongo post complete");
+  // console.log("mongo post complete");
 };
 
 const getPhraseRequestComplete = function(allPhrases){
-  console.log(allPhrases);
+  // console.log(allPhrases);
   allPhrases.forEach(function(phrasePair){
-    console.log("phrasePair", phrasePair);
+    // console.log("phrasePair", phrasePair);
     const originalPhrase = phrasePair.originalPhrase;
     const translatedPhrase = phrasePair.translatedPhrase;
-    console.log("translatedPhrase", translatedPhrase);
+    // console.log("translatedPhrase", translatedPhrase);
     appendTranslationPair(originalPhrase, translatedPhrase);
   });
 };
