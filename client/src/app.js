@@ -17,12 +17,13 @@ const app = function(){
 
   const countriesSelectView = new CountriesSelectView(document.querySelector("#countries"));
 
-  const world = new CountryList("https://restcountries.eu/rest/v2/all?fields=name;languages;flag;capital;latlng;alpha2Code");
+  const countriesUrl = "https://restcountries.eu/rest/v2/all?fields=name;languages;flag;capital;latlng;alpha2Code";
+  const countryList = new CountryList(countriesUrl);
 
-  world.onUpdate = function(countries) {
+  countryList.onUpdate = function(countries) {
     countriesSelectView.render(countries);
   };
-  world.populate();
+  countryList.populate();
 
   countriesSelectView.onChange = function(country){
     const targetLanguageCode = country.languages[0].iso639_1;
