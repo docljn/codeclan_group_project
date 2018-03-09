@@ -2,7 +2,7 @@ const CountriesSelectView = require("./views/countries_select_view");
 const CountryList = require("./models/country_list");
 const phraseList = require("./models/phrase_list");
 const Request = require("./services/request");
-const openWeatherAPI = require("./resources/openweatherAPI");
+const WeatherDisplay = require("./models/weather_display");
 
 /* start of app code */
 const app = function(){
@@ -48,7 +48,8 @@ const app = function(){
     } else clearPhraseTable();
 
     createFlag(flag_src);
-    createWeatherDisplay(countryCapital);
+    const localWeatherDisplay = new WeatherDisplay();
+    localWeatherDisplay.create(countryCapital);
     // createWeatherDisplay(countryLatLng); // for alt weatherAPI
     // ** hardcoded phrase at the moment to prove text to speech works **
     speakPhrase("bonjour", speechLanguage);
@@ -73,7 +74,7 @@ const languagePresentRequestComplete = function(allPhrases){
       appendTranslationPair (originalPhrase, translatedPhrase);
     }
   }
-}
+};
 
 /* End of app code */
 
@@ -116,80 +117,7 @@ const createFlag = function(flagImage){
   div.appendChild(img);
 };
 
-const createWeatherDisplay = function (city) {
-  // THIS IS FOR THE ALTERNATE WEATHER API
-  // const createWeatherDisplay = function (latlng) {
-  // api.openweathermap.org/data/2.5/weather?q=London,uk
-  // api.openweathermap.org/data/2.5/weather?lat=35&lon=139
-  // http://api.openweathermap.org/data/2.5/forecast?id=524901&APPID={APIKEY}
-  // const openWeatherAPI = {
-  //   url: "http://api.openweathermap.org/data/2.5/weather?",
-  //   key: "62b03d8973a50751df56ad8de8a4cc3c"
-  // };
-  // THIS IS FOR THE ALT WEATHER API
-  // let completeURL = openWeatherAPI.url + "lat=" + latlng[0] + "&lon=" + latlng[1] + "&APPID=" + openWeatherAPI.key;
-  // Source for url and key commented out to avoid exceding api call limits
-  let completeURL = openWeatherAPI.url + "q=" + city + "&APPID=" + openWeatherAPI.key;
 
-  makeWeatherRequest(completeURL, sendAPIRequest);
-};
-
-const makeWeatherRequest = function (url, callback) {
-  const request = new XMLHttpRequest();
-  request.open("GET", url);
-  request.addEventListener("load", callback);
-  request.send();
-};
-
-const sendAPIRequest = function () {
-  if(this.status !== 200) {
-    clearWeatherHtml();
-    return;
-  }
-  const jsonString = this.responseText;
-  const weatherObject = JSON.parse(jsonString);
-  buildWeatherHtml(weatherObject);
-};
-
-const clearWeatherHtml = function () {
-  const weatherDiv = document.getElementById("weather");
-  weatherDiv.innerHTML = "";
-};
-
-const buildWeatherHtml = function (weatherObject) {
-  console.log(weatherObject);
-  const weatherDiv = document.getElementById("weather");
-  weatherDiv.innerHTML = "";
-
-  const nearestWeatherStation = weatherObject.name;
-
-  const weatherDescription =  weatherObject.weather[0].description;
-
-  const weatherIconSource = "http://openweathermap.org/themes/openweathermap/assets/vendor/owm/img/widgets/" + weatherObject.weather[0].icon + ".png";
-
-  const currentTemperature = Math.round(weatherObject.main.temp-273);
-  const htmlDegrees = "℃";
-
-  // make html elements needed
-  const stationHeading = document.createElement("h3");
-  stationHeading.innerText = "Weather in " + nearestWeatherStation;
-
-  const weatherUL = document.createElement("ul");
-
-  const icon = document.createElement("img");
-  icon.src = weatherIconSource;
-  icon.id = "weather_icon";
-
-  const liTemp = document.createElement("li");
-  liTemp.innerText = currentTemperature + htmlDegrees + ": " + weatherDescription;
-
-  weatherUL.appendChild(icon);
-  weatherUL.appendChild(liTemp);
-
-  weatherDiv.appendChild(stationHeading);
-  weatherDiv.appendChild(weatherUL);
-
-};
 
 
 function speakPhrase(phrase, speechLanguage) {
