@@ -40,6 +40,16 @@ MongoClient.connect(url, function(err, client){
 
   })
 
+  phrasesRouter.delete("/phrases/:languageCode/:phrase", function(req, res){
+    const languageCode = req.params.languageCode;
+    const phrase = req.params.phrase;
+    const collection = db.collection(languageCode);
+    collection.remove({"translatedPhrase": phrase });
+    res.status(204);
+    res.send();
+
+  })
+
 })
 
 module.exports = phrasesRouter;
