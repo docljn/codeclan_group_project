@@ -28,6 +28,7 @@ const app = function(){
     const targetLanguageCode = country.languages[0].iso639_1;
     localStorage.setItem("targetLanguage", targetLanguageCode);
     const flag_src = country.flag;
+    const countryName = country.name;
     const countryCapital = country.capital;
     // const countryLatLng = country.latlng; // needed for local weather alternate api
     const country_alpha2Code = country.alpha2Code;
@@ -43,9 +44,10 @@ const app = function(){
       mongoRequest.get(languagePresentRequestComplete);
     } else clearPhraseTable();
 
-    createFlag(flag_src);
+    createFlag(flag_src, countryName);
     const localWeatherDisplay = new WeatherDisplay();
     localWeatherDisplay.create(countryCapital);
+
     // createWeatherDisplay(countryLatLng); // for alt weatherAPI
   };
 };
@@ -97,12 +99,13 @@ const clearPhraseTable = function(){
 
 }
 
-const createFlag = function(flagImage){
+const createFlag = function(flagImage, countryName){
   const div = document.getElementById("flag_id");
   div.innerHTML = "";
   const img = document.createElement("img");
   img.src = flagImage;
   img.id = "flag_image";
+  img.alt = "Flag of " + countryName;
   div.appendChild(img);
 };
 
