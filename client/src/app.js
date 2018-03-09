@@ -33,6 +33,8 @@ const app = function(){
     const country_alpha2Code = country.alpha2Code;
     const speechLanguage =  targetLanguageCode + "-" + country_alpha2Code;
     localStorage.setItem("speechLanguage", speechLanguage);
+    const phraseTable = document.getElementById("phrase-table-id");
+    phraseTable.hidden = false;
     const tableBody = document.getElementById("phrase_table_body");
     tableBody.innerText = "";
     const inputPhraseSection = document.getElementById("input-phrase-section");
@@ -243,7 +245,7 @@ const appendTranslationPair = function(originalPhrase, translatedPhrase){
   const tableBody = document.getElementById("phrase_table_body");
 
   const tableRow = document.createElement("tr");
-  const originalPhraseTag = document.createElement("th");
+  const originalPhraseTag = document.createElement("td");
   originalPhraseTag.innerText = originalPhrase;
   const translatedPhraseTag = document.createElement("td");
   const languageCode = localStorage.getItem("targetLanguage");
