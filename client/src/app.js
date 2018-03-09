@@ -38,12 +38,13 @@ const app = function(){
     localStorage.setItem("speechLanguage", speechLanguage);
     const tableBody = document.getElementById("phrase_table_body");
     tableBody.innerText = "";
-    buildPhraseTable(country);
-
-    // see if there is  db entry for this languageCode
-    const requestURL = "http://localhost:3000/phrases/" + targetLanguageCode ;
-    const mongoRequest = new Request(requestURL);
-    mongoRequest.get(languagePresentRequestComplete);
+    if (targetLanguageCode != "en"){
+      buildPhraseTable(country);
+      // see if there is  db entry for this languageCode
+      const requestURL = "http://localhost:3000/phrases/" + targetLanguageCode ;
+      const mongoRequest = new Request(requestURL);
+      mongoRequest.get(languagePresentRequestComplete);
+    } else clearPhraseTable();
 
     createFlag(flag_src);
     createWeatherDisplay(countryCapital);
@@ -95,6 +96,14 @@ const buildPhraseTable = function(country){
   homeLanguage.innerText = "English";
   const targetLanguage = document.getElementById("target_language");
   targetLanguage.innerText = country.languages[0].name;
+}
+
+const clearPhraseTable = function(){
+  const homeLanguage = document.getElementById("home_language");
+  homeLanguage.innerText = "";
+  const targetLanguage = document.getElementById("target_language");
+  targetLanguage.innerText = "";
+
 }
 
 const createFlag = function(flagImage){
@@ -264,6 +273,8 @@ const mongoRequestComplete = function(){
   console.log("mongo post complete");
 };
 
+// I t doesn't look like this is used now.
+//  ripe for deletion!
 const getPhraseRequestComplete = function(allPhrases){
   console.log(allPhrases);
   allPhrases.forEach(function(phrasePair){
