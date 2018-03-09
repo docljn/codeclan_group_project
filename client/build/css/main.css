@@ -2,11 +2,7 @@
   box-sizing: border-box;
 }
 
-.page_header{
-  margin: 5%;
-  padding-top: 5%;
-  padding-left: 10%;
-}
+
 
 h1{
   font-family: 'Indie Flower', cursive;
@@ -39,10 +35,23 @@ button:hover{
   opacity: 1;
 }
 
-#countries{
-    margin-top: 20px;
+footer{
+  font-family: 'Noto Sans', sans-serif;
+  font-size: 10px;
+  padding-left: 20px;
+  position: fixed;
+  height: 60px;
+  background-color: rgb(100, 225, 255);
+  width: 100%;
+  bottom: 0;
 }
 
+
+.page_header{
+  margin: 5%;
+  padding-top: 5%;
+  padding-left: 10%;
+}
 
 
 .flag{
@@ -59,17 +68,13 @@ button:hover{
   align-content: space-around;
   justify-content: space-around;
   align-items: center;
+  flex-wrap: wrap;
 }
 
-footer{
-  font-family: 'Noto Sans', sans-serif;
-  font-size: 10px;
-  padding-left: 20px;
-  position: fixed;
-  height: 60px;
-  background-color: rgb(100, 225, 255);
-  width: 100%;
-  bottom: 0;
+
+
+#countries{
+    margin-top: 20px;
 }
 
 #flag_image{
@@ -85,6 +90,11 @@ margin: 0px auto;
 overflow: hidden;
 background: url(resised_block_world_map.jpg) repeat-x;
 animation: animate-background linear 15s infinite;
+}
+
+#map{
+  min-width: 500px;
+  height: 300px;
 }
 
 @keyframes animate-background {

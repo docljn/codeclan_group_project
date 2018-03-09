@@ -3,6 +3,7 @@ const CountryList = require("./models/country_list");
 const phraseList = require("./models/phrase_list");
 const Request = require("./services/request");
 const WeatherDisplay = require("./models/weather_display");
+const LocationMap = require("./models/location_map");
 
 const app = function(){
   let voices = [];
@@ -51,6 +52,12 @@ const app = function(){
     createFlag(flag_src, countryName);
     const localWeatherDisplay = new WeatherDisplay();
     localWeatherDisplay.create(countryCapital);
+
+    const mapDiv = document.getElementById("map");
+    mapDiv.hidden = false;
+    const countryLocationMap = new LocationMap();
+    const mapCountryCode = country_alpha2Code.toLowerCase();
+    countryLocationMap.create("map", mapCountryCode, countryName);
 
     // createWeatherDisplay(countryLatLng); // for alt weatherAPI
   };
