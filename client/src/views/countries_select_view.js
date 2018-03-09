@@ -5,14 +5,13 @@ const CountrySelectView = function(selectElement) {
   this.filteredCountries = [];
   this.selectElement.addEventListener("change", function (e) {
     const target = e.target;
-    const index = target.selectedIndex;
+    const index = target.selectedIndex - 1;
     const country = this.countries[index];
     this.onChange(country);
   }.bind(this), false);
 };
 
 CountrySelectView.prototype.render = function(filteredCountries){
-  // this.selectElement.innerHTML = "";
   this.countries = filteredCountries;
   this.countries.forEach(function(country, index) {
     country.index = index;
