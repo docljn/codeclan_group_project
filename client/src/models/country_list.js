@@ -7,9 +7,10 @@ const CountryList = function(url) { // is it a list?
 };
 
 CountryList.prototype.populate = function(){
-  let filteredCountries = [{"languages": [
-    { "iso639_1": "en", "name": ""} ] , name: "Select destination country", index: 0}];
+  // let filteredCountries = [{"languages": [
+  //   { "iso639_1": "en", "name": ""} ] , name: "Select destination country", index: 0}];
 
+  let filteredCountries = [];
   const request = new XMLHttpRequest();
   request.open("GET", this.url);
   request.onload = function() {
