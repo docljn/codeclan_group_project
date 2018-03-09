@@ -33,8 +33,12 @@ const app = function(){
     const country_alpha2Code = country.alpha2Code;
     const speechLanguage =  targetLanguageCode + "-" + country_alpha2Code;
     localStorage.setItem("speechLanguage", speechLanguage);
+    const phraseTable = document.getElementById("phrase-table-id");
+    phraseTable.hidden = false;
     const tableBody = document.getElementById("phrase_table_body");
     tableBody.innerText = "";
+    const inputPhraseSection = document.getElementById("input-phrase-section");
+    inputPhraseSection.hidden = false;
     if (targetLanguageCode != "en"){
       buildPhraseTable(country);
       // see if there is  db entry for this languageCode

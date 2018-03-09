@@ -5,12 +5,35 @@
   margin-left: 5%;
 }
 
+table, td, th{
+  border: 1px solid grey;
+}
+
+select{
+  background-color: rgb(149, 228, 249);
+  height: 26px;
+}
+
 thead{
+  padding: 10px;
   font-size: 14px;
   color: rgb(41, 120, 244);
+  /* border: 1px solid black; */
+}
+
+#phrase_input{
+  margin: 5%;
+  margin-right: 10px;
+  height: 26px;
+  background-color: rgb(185, 232, 245);
+}
+
+#phrase_submit{
+
 }
 
 td{
   padding: 10px;
   padding-right: 10px;
+  /* border: 1px solid black; */
 }

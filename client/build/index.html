@@ -1,63 +1,65 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>TravelApp</title>
-    <link rel='stylesheet' type='text/css' href='css/main.css'>
-    <link rel="stylesheet" type="text/css" href="css/phrases.css">
-    <script src='bundle.js'></script>
+<head>
+  <meta charset="utf-8">
+  <title>TravelApp</title>
+  <link rel='stylesheet' type='text/css' href='css/main.css'>
+  <link rel="stylesheet" type="text/css" href="css/phrases.css">
+  <script src='bundle.js'></script>
 
-    <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
 
-  </head>
+</head>
 
-  <body>
-    <header class="page_header" id="banner">
-        <h1>traveLingo</h1>
-    </header>
+<body>
+  <header class="page_header" id="banner">
+    <h1>traveLingo</h1>
+    <h4>your personal phrasebook</h4>
+  </header>
 
-    <aside class="additional_info flex">
-      <div id="flag_id" class="flag">
+  <aside class="additional_info flex">
+    <div id="flag_id" class="flag">
 
-      </div>
-      <div id="weather">
+    </div>
+    <div id="weather">
 
-      </div>
+    </div>
 
-    </aside>
+  </aside>
 
-    <main>
-      <section>
-        <label for="countries" value="Country Select Dropdown"></label>
-        <select id="countries">
-          <option selected disabled>Select a destination country</option>
+  <main>
 
-        </select>
 
-      </section>
 
-      <input type="text" id="phrase_input">
+    <section>
+      <label for="countries" value="Country Select Dropdown"></label>
+      <select id="countries">
+        <option selected disabled>Select a destination country</option>
+      </select>
+    </section>
+
+    <section id="input-phrase-section" hidden>
+      <label for="phrase input"></label>
+      <input name="phrase input" type="text" id="phrase_input">
+      <label for="submit button"></label>
       <button type="button" name="submitButton" id="submit_phrase">submit</button>
+    </section>
+
+    <div class="phrases" id="phrases">
+      <table class="phrase-table" id="phrase-table-id" hidden>
+        <thead>
+          <tr>
+            <th scope="col" id="home_language"></th>
+            <th scope="col" id="target_language"></th>
+          </tr>
+        </thead>
+        <tbody id="phrase_table_body">
+        </tbody>
+      </table>
+    </div>
+
+  </main>
 
 
-
-      <hr>
-
-      <div class="phrases" id="phrases">
-        <table>
-          <thead>
-            <tr>
-              <th scope="col" id="home_language"></th>
-              <th scope="col" id="target_language"></th>
-            </tr>
-          </thead>
-          <tbody id="phrase_table_body">
-          </tbody>
-        </table>
-      </div>
-
-    </main>
-
-
-  </body>
+</body>
 </html>
