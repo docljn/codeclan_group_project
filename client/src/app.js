@@ -3,7 +3,6 @@ const CountryList = require("./models/country_list");
 const phraseList = require("./models/phrase_list");
 const Request = require("./services/request");
 
-/* start of app code */
 const app = function(){
   let voices = [];
 
@@ -25,16 +24,13 @@ const app = function(){
   world.populate();
 
   countriesSelectView.onChange = function(country){
-    // console.log(country);
     const targetLanguageCode = country.languages[0].iso639_1;
     localStorage.setItem("targetLanguage", targetLanguageCode);
     const flag_src = country.flag;
     const countryCapital = country.capital;
     // const countryLatLng = country.latlng; // needed for local weather alternate api
     const country_alpha2Code = country.alpha2Code;
-    // console.log(country_alpha2Code);
     const speechLanguage =  targetLanguageCode + "-" + country_alpha2Code;
-    // console.log("speechLanguage", speechLanguage);
     localStorage.setItem("speechLanguage", speechLanguage);
     const tableBody = document.getElementById("phrase_table_body");
     tableBody.innerText = "";
@@ -49,14 +45,11 @@ const app = function(){
     createFlag(flag_src);
     createWeatherDisplay(countryCapital);
     // createWeatherDisplay(countryLatLng); // for alt weatherAPI
-    // ** hardcoded phrase at the moment to prove text to speech works **
-    speakPhrase("bonjour", speechLanguage);
   };
 };
 
 const languagePresentRequestComplete = function(allPhrases){
 
-  console.log(allPhrases.length);
   if (allPhrases.length === 0){
     const targetLanguageCode = localStorage.getItem("targetLanguage");
     const request = new XMLHttpRequest();
@@ -74,8 +67,6 @@ const languagePresentRequestComplete = function(allPhrases){
   }
 }
 
-/* End of app code */
-
 const translateRequestComplete = function(){
   if(this.status !== 200) return;
   const jsonString = this.responseText;
@@ -84,9 +75,7 @@ const translateRequestComplete = function(){
   for (let i=0; i < translatedPhraseArray.data.length; i++){
 
     const originalPhrase = phraseList[i];
-    console.log("originalPhrase", originalPhrase);
     const translatedPhrase = translatedPhraseArray.data[i];
-    console.log("translatedPhrase", translatedPhrase);
     savePhrasePair(originalPhrase, translatedPhrase);
   }
 };
@@ -208,11 +197,9 @@ function populateVoiceList() {
     return;
   }
   voices = speechSynthesis.getVoices();
-  // console.log("voices", voices);
 }
 
 const getCustomPhraseButtonClicked = function(){
-  // console.log("Home text buttonclicked");
   const phraseInput = document.getElementById("phrase_input");
   const phraseToTranslate = phraseInput.value;
   const languageCode = localStorage.getItem("targetLanguage");
@@ -222,7 +209,6 @@ const getCustomPhraseButtonClicked = function(){
   requestPhrase.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
   requestPhrase.onload = requestCompleteSinglePhrase;
   const requestBody = {language: languageCode, phrase: phraseToTranslate};
-  // console.log("request body", requestBody);
   requestPhrase.send(JSON.stringify(requestBody));
 };
 
@@ -230,9 +216,7 @@ const requestCompleteSinglePhrase = function(){
   if(this.status !== 200) return;
   const jsonString = this.responseText;
   const translatedPhrase = JSON.parse(jsonString).data;
-  // console.log("translated phrase", translatedPhrase);
   const originalPhrase = document.getElementById("phrase_input").value;
-  // console.log("output of requestComplete", translatedPhrase);
   const speechLanguage  = localStorage.getItem("speechLanguage");
   speakPhrase(translatedPhrase, speechLanguage)
 
@@ -244,10 +228,8 @@ const savePhrasePair = function(originalPhrase, translatedPhrase){
   const languageCode = localStorage.getItem("targetLanguage");
 
   const requestURL = "http://localhost:3000/phrases/" + languageCode ;
-  // console.log("RequestURL", requestURL);
   const mongoRequest = new Request(requestURL);
   const bodyToSend = {originalPhrase: originalPhrase, translatedPhrase: translatedPhrase };
-  // console.log("Body to send", bodyToSend);
   mongoRequest.post(mongoRequestComplete, bodyToSend);
   appendTranslationPair(originalPhrase, translatedPhrase);
 };
@@ -277,12 +259,9 @@ const mongoRequestComplete = function(){
 // I t doesn't look like this is used now.
 //  ripe for deletion!
 const getPhraseRequestComplete = function(allPhrases){
-  console.log(allPhrases);
   allPhrases.forEach(function(phrasePair){
-    // console.log("phrasePair", phrasePair);
     const originalPhrase = phrasePair.originalPhrase;
     const translatedPhrase = phrasePair.translatedPhrase;
-    // console.log("translatedPhrase", translatedPhrase);
     appendTranslationPair(originalPhrase, translatedPhrase);
   });
 };
