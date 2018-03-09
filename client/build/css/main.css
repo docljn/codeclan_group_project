@@ -7,11 +7,15 @@
 h1{
   font-family: 'Indie Flower', cursive;
   font-size: 54px;
+  margin-bottom: 10px
+
 }
 
-h2{
+h2,h4{
   font-family: 'Indie Flower', cursive;
   font-size: 20px;
+  margin-left: 12%;
+  margin-top: 10px;
 }
 
 #countries{
@@ -53,7 +57,7 @@ h2{
 
 #banner{
 width: 100%;
-height: 130px;
+height: 200px;
 margin: 0px auto;
 overflow: hidden;
 background: url(resised_block_world_map.jpg) repeat-x;

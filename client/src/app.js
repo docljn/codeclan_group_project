@@ -35,6 +35,8 @@ const app = function(){
     localStorage.setItem("speechLanguage", speechLanguage);
     const tableBody = document.getElementById("phrase_table_body");
     tableBody.innerText = "";
+    const inputPhraseSection = document.getElementById("input-phrase-section");
+    inputPhraseSection.hidden = false;
     if (targetLanguageCode != "en"){
       buildPhraseTable(country);
       // see if there is  db entry for this languageCode

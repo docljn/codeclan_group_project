@@ -5,12 +5,19 @@
   margin-left: 5%;
 }
 
+table{
+  /* border: 1px solid black; */
+}
+
 thead{
+  padding: 10px;
   font-size: 14px;
   color: rgb(41, 120, 244);
+  /* border: 1px solid black; */
 }
 
 td{
   padding: 10px;
   padding-right: 10px;
+  /* border: 1px solid black; */
 }
