@@ -34,7 +34,6 @@ const sendAPIRequest = function () {
 
 
 const buildWeatherHtml = function (weatherObject) {
-  console.log(weatherObject);
   const weatherDiv = document.getElementById("weather");
   const nearestWeatherStation = weatherObject.name;
   const weatherDescription =  weatherObject.weather[0].description;
