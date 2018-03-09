@@ -34,8 +34,12 @@ const app = function(){
     const country_alpha2Code = country.alpha2Code;
     const speechLanguage =  targetLanguageCode + "-" + country_alpha2Code;
     localStorage.setItem("speechLanguage", speechLanguage);
+    const phraseTable = document.getElementById("phrase-table-id");
+    phraseTable.hidden = false;
     const tableBody = document.getElementById("phrase_table_body");
     tableBody.innerText = "";
+    const inputPhraseSection = document.getElementById("input-phrase-section");
+    inputPhraseSection.hidden = false;
     if (targetLanguageCode != "en"){
       buildPhraseTable(country);
       // see if there is  db entry for this languageCode
@@ -169,18 +173,41 @@ const savePhrasePair = function(originalPhrase, translatedPhrase){
 
 
 const appendTranslationPair = function(originalPhrase, translatedPhrase){
+  const speechLanguage = localStorage.getItem("speechLanguage");
+  const languageCode = localStorage.getItem("targetLanguage");
+
   const tableBody = document.getElementById("phrase_table_body");
 
   const tableRow = document.createElement("tr");
-  const originalPhraseTag = document.createElement("th");
+  tableRow.setAttribute("id", translatedPhrase);
+  const originalPhraseTag = document.createElement("td");
   originalPhraseTag.innerText = originalPhrase;
   const translatedPhraseTag = document.createElement("td");
-  const languageCode = localStorage.getItem("targetLanguage");
+
+  const speakButtonCell = document.createElement("td");
+  const speakButton = document.createElement("button")
+  speakButton.addEventListener("click", function() {
+    speakButtonClicked(translatedPhrase);
+  });
+  speakButton.innerText = "speak";
+  speakButtonCell.appendChild(speakButton);
+
+  const deleteButtonCell = document.createElement("td");
+  const deleteButton = document.createElement("button")
+  deleteButton.addEventListener("click", function(){
+    deleteButtonClicked(languageCode, translatedPhrase);
+  })
+  deleteButton.innerText = "delete";
+  deleteButtonCell.appendChild(deleteButton);
+
+
   translatedPhraseTag.setAttribute('lang', languageCode);
   translatedPhraseTag.innerText = translatedPhrase;
 
   tableRow.appendChild(originalPhraseTag);
   tableRow.appendChild(translatedPhraseTag);
+  tableRow.appendChild(speakButtonCell);
+  tableRow.appendChild(deleteButtonCell);
   tableBody.appendChild(tableRow);
 
 };
@@ -188,6 +215,22 @@ const appendTranslationPair = function(originalPhrase, translatedPhrase){
 const mongoRequestComplete = function(){
   console.log("mongo post complete");
 };
+
+const speakButtonClicked = function(translatedPhrase){
+  const speechLanguage = localStorage.getItem("speechLanguage");
+  speakPhrase(translatedPhrase, speechLanguage)
+  console.log("speak button speakButtonClicked");
+};
+
+const deleteButtonClicked = function(languageCode, translatedPhrase){
+  const encodedPhrase = encodeURIComponent(translatedPhrase);
+  const requestURL = "http://localhost:3000/phrases/" + languageCode +"/"+ encodedPhrase ;
+  const mongoRequest = new Request(requestURL);
+  mongoRequest.delete(mongoRequestComplete);
+  const rowToRemove = document.getElementById(translatedPhrase);
+  rowToRemove.innerHTML = "";
+};
+
 
 // I t doesn't look like this is used now.
 //  ripe for deletion!
