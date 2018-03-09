@@ -2,8 +2,10 @@
   width: 60px;
 }
 
-#weather {
-  border: solid black 1px;
-  border-radius: 4px;
-  background-color: darkgray;
+#weather-card {
+  border: solid black 2px;
+  border-radius: 9px;
+  background-color: #778899;
+  padding: 4px;
+  text-align: center;
 }

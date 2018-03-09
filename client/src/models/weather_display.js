@@ -45,23 +45,23 @@ const buildWeatherHtml = function (weatherObject) {
   weatherDiv.innerHTML = "";
 
   // make html elements needed
+  const weatherCard = document.createElement("div");
+  weatherCard.id = "weather-card";
   const stationHeading = document.createElement("h3");
   stationHeading.innerText = "Weather in " + nearestWeatherStation;
-
-  const weatherUL = document.createElement("ul");
 
   const icon = document.createElement("img");
   icon.src = weatherIconSource;
   icon.id = "weather_icon";
 
-  const liTemp = document.createElement("li");
-  liTemp.innerText = currentTemperature + htmlDegrees + ": " + weatherDescription;
+  const temp = document.createElement("p");
+  temp.innerText = currentTemperature + htmlDegrees + ": " + weatherDescription;
 
-  weatherUL.appendChild(icon);
-  weatherUL.appendChild(liTemp);
+  weatherCard.appendChild(stationHeading);
+  weatherCard.appendChild(icon);
+  weatherCard.appendChild(temp);
 
-  weatherDiv.appendChild(stationHeading);
-  weatherDiv.appendChild(weatherUL);
+  weatherDiv.appendChild(weatherCard);
 
 };
 
