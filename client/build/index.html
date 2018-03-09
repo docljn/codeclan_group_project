@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <title>TravelApp</title>
-    <link rel='stylesheet' type='text/css' href='main.css'>
-    <link rel="stylesheet" type="text/css" href="flash_cards.css">
+    <link rel='stylesheet' type='text/css' href='css/main.css'>
+    <link rel="stylesheet" type="text/css" href="css/phrases.css">
     <script src='bundle.js'></script>
 
     <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
@@ -27,19 +27,33 @@
     </aside>
 
     <main>
+      <section>
+        <label for="countries" value="Country Select Dropdown"></label>
+        <select id="countries">
+          <option selected disabled>Select a destination country</option>
+
+        </select>
+
+      </section>
 
       <input type="text" id="phrase_input">
       <button type="button" name="submitButton" id="submit_phrase">submit</button>
 
+
+
       <hr>
 
-      <select id="countries">
-
-      </select>
-
-
       <div class="phrases" id="phrases">
-
+        <table>
+          <thead>
+            <tr>
+              <th scope="col" id="home_language"></th>
+              <th scope="col" id="target_language"></th>
+            </tr>
+          </thead>
+          <tbody id="phrase_table_body">
+          </tbody>
+        </table>
       </div>
 
     </main>

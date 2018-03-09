@@ -1,0 +1,16 @@
+.phrases{
+  width: 100%;
+  font-family: helvetica;
+  text-align: left;
+  margin-left: 5%;
+}
+
+thead{
+  font-size: 14px;
+  color: rgb(41, 120, 244);
+}
+
+td{
+  padding: 10px;
+  padding-right: 10px;
+}
