@@ -288,7 +288,8 @@ const speakButtonClicked = function(translatedPhrase){
 };
 
 const deleteButtonClicked = function(languageCode, translatedPhrase){
-  const requestURL = "http://localhost:3000/phrases/" + languageCode +"/"+ translatedPhrase ;
+  const encodedPhrase = encodeURIComponent(translatedPhrase);
+  const requestURL = "http://localhost:3000/phrases/" + languageCode +"/"+ encodedPhrase ;
   const mongoRequest = new Request(requestURL);
   mongoRequest.delete(mongoRequestComplete);
   const rowToRemove = document.getElementById(translatedPhrase);
