@@ -2,6 +2,7 @@ const CountriesSelectView = require("./views/countries_select_view");
 const CountryList = require("./models/country_list");
 const phraseList = require("./models/phrase_list");
 const Request = require("./services/request");
+const openWeatherAPI = require("./resources/openweatherAPI");
 
 /* start of app code */
 const app = function(){
@@ -100,6 +101,7 @@ const createWeatherDisplay = function (city) {
   //   url: "http://api.openweathermap.org/data/2.5/weather?",
   //   key: "62b03d8973a50751df56ad8de8a4cc3c"
   // };
+  // THIS IS FOR THE ALT WEATHER API
   // let completeURL = openWeatherAPI.url + "lat=" + latlng[0] + "&lon=" + latlng[1] + "&APPID=" + openWeatherAPI.key;
   // Source for url and key commented out to avoid exceding api call limits
   let completeURL = openWeatherAPI.url + "q=" + city + "&APPID=" + openWeatherAPI.key;

@@ -64,6 +64,9 @@ typings/
 #Bundles
 bundle.*
 
+#API keys
+openweatherAPI.js
+
 
 
 # End of https://www.gitignore.io/api/node
