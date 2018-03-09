@@ -8,6 +8,7 @@
   <script src='bundle.js'></script>
 
   <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
 
 </head>
 
@@ -18,9 +19,6 @@
   </header>
 
   <aside class="additional_info flex">
-    <div id="flag_id" class="flag">
-
-    </div>
     <div id="weather">
 
     </div>
@@ -31,16 +29,21 @@
 
 
 
-    <section>
+    <section class="select-and-flag">
       <label for="countries" value="Country Select Dropdown"></label>
       <select id="countries">
         <option selected disabled>Select a destination country</option>
       </select>
+
+      <div id="flag_id" class="flag">
+
+      </div>
     </section>
+
 
     <section id="input-phrase-section" hidden>
       <label for="phrase input"></label>
-      <input name="phrase input" type="text" id="phrase_input">
+      <input name="phrase input" type="text" id="phrase_input" value="Enter a custom phrase">
       <label for="submit button"></label>
       <button type="button" name="submitButton" id="submit_phrase">submit</button>
     </section>
@@ -59,7 +62,6 @@
     </div>
 
   </main>
-
 
 </body>
 </html>

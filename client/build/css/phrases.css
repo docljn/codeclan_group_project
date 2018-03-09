@@ -1,39 +1,38 @@
 .phrases{
   width: 100%;
-  font-family: helvetica;
+  font-family: 'Noto Sans', sans-serif;
   text-align: left;
   margin-left: 5%;
 }
 
 table, td, th{
-  border: 1px solid grey;
+  border: 1px solid lightgrey;
+  display: flex hidden;
 }
 
 select{
-  background-color: rgb(149, 228, 249);
   height: 26px;
+  margin-left: 5%;
+  font-size: 16px;
+  font-family: 'Noto Sans', sans-serif;
+  margin-right: 20px
 }
 
 thead{
   padding: 10px;
   font-size: 14px;
   color: rgb(41, 120, 244);
-  /* border: 1px solid black; */
 }
 
 #phrase_input{
   margin: 5%;
   margin-right: 10px;
   height: 26px;
-  background-color: rgb(185, 232, 245);
+  font-size: 16px;
 }
 
-#phrase_submit{
-
-}
 
 td{
   padding: 10px;
   padding-right: 10px;
-  /* border: 1px solid black; */
 }

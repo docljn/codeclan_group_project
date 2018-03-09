@@ -8,7 +8,10 @@ h1{
   font-family: 'Indie Flower', cursive;
   font-size: 54px;
   margin-bottom: 10px
+}
 
+body{
+  font-family: 'Noto Sans', sans-serif;
 }
 
 h2,h4{
@@ -16,6 +19,20 @@ h2,h4{
   font-size: 20px;
   margin-left: 12%;
   margin-top: 10px;
+}
+
+button{
+  padding: 5px 20px;
+  font-size: 16px;
+  font-family: 'Noto Sans', sans-serif;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: 0.7s;
+}
+
+button:hover{
+  background-color: rgb(212, 237, 238);
+  opacity: 1;
 }
 
 #countries{
@@ -30,6 +47,10 @@ h2,h4{
   margin-left: 5%;
 }
 
+.select-and-flag{
+  display: flex;
+}
+
 
 .flex {
   display: flex;
@@ -38,8 +59,8 @@ h2,h4{
   align-items: baseline;
 }
 
-.footer{
-  font-family: helvetica;
+footer{
+  font-family: 'Noto Sans', sans-serif;
   font-size: 10px;
   padding-left: 20px;
   position: fixed;
@@ -50,9 +71,9 @@ h2,h4{
 }
 
 #flag_image{
-  width: 90px;
-  border: solid black 1px;
-  margin: 0;
+  width: 200px;
+  border: solid lightgrey 1px;
+  margin: 5%;
 }
 
 #banner{
