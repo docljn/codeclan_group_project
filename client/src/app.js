@@ -2,13 +2,14 @@ const CountriesSelectView = require("./views/countries_select_view");
 const CountryList = require("./models/country_list");
 const phraseList = require("./models/phrase_list");
 const Request = require("./services/request");
+const VoiceList = require("./models/voice_list.js");
+const voiceList = new VoiceList();
 
 const app = function(){
-  let voices = [];
 
-  populateVoiceList();
+  voiceList.populate();
   if (typeof speechSynthesis !== "undefined" && speechSynthesis.onvoiceschanged !== undefined) {
-    speechSynthesis.onvoiceschanged = populateVoiceList;
+    speechSynthesis.onvoiceschanged = voiceList.populate;
   }
 
   const getCustomPhraseButton = document.querySelector("#submit_phrase");
@@ -184,27 +185,6 @@ const buildWeatherHtml = function (weatherObject) {
 
 };
 
-
-function speakPhrase(phrase, speechLanguage) {
-  let msg = new SpeechSynthesisUtterance();
-  msg.text = phrase;
-  msg.lang = speechLanguage;
-
-  for(let i=0;i<voices.length;i++){
-    if(voices[i].lang==speechLanguage) {
-      msg.voice = voices[i];
-    }
-  }
-  speechSynthesis.speak(msg);
-}
-
-function populateVoiceList() {
-  if(typeof speechSynthesis === "undefined") {
-    return;
-  }
-  voices = speechSynthesis.getVoices();
-}
-
 const getCustomPhraseButtonClicked = function(){
   const phraseInput = document.getElementById("phrase_input");
   const phraseToTranslate = phraseInput.value;
@@ -224,7 +204,8 @@ const requestCompleteSinglePhrase = function(){
   const translatedPhrase = JSON.parse(jsonString).data;
   const originalPhrase = document.getElementById("phrase_input").value;
   const speechLanguage  = localStorage.getItem("speechLanguage");
-  speakPhrase(translatedPhrase, speechLanguage)
+
+  voiceList.speakPhrase(translatedPhrase, speechLanguage);
 
   savePhrasePair(originalPhrase, translatedPhrase);
 };
@@ -287,7 +268,8 @@ const mongoRequestComplete = function(){
 
 const speakButtonClicked = function(translatedPhrase){
   const speechLanguage = localStorage.getItem("speechLanguage");
-  speakPhrase(translatedPhrase, speechLanguage)
+
+  voiceList.speakPhrase(translatedPhrase, speechLanguage);
   console.log("speak button speakButtonClicked");
 };
 
