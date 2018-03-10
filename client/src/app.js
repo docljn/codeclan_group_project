@@ -145,7 +145,7 @@ const requestCompleteSinglePhrase = function(){
   if(this.status !== 200) return;
   const jsonString = this.responseText;
   const translatedPhrase = JSON.parse(jsonString).data;
-  const originalPhrase = document.getElementById("phrase_input").value;
+  const originalPhrase = document.getElementById("phrase-input").value;
   const speechLanguage  = localStorage.getItem("speechLanguage");
 
   textToSpeech.speakPhrase(translatedPhrase, speechLanguage);
