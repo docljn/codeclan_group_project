@@ -1,7 +1,7 @@
 const express = require("express");
 const phrasesRouter = express.Router();
 const MongoClient = require("mongodb").MongoClient;
-const url = "mongodb://localhost:27017";
+const url = "mongodb://localhost:27017/travel_lingo";
 
 MongoClient.connect(url, function(err, client){
   // console.log("error log", err);
