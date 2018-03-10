@@ -1,17 +1,15 @@
-const VoiceList = function(){
+const TextToSpeech = function(){
   this.voices = [];
-  this.onUpdate = null;
 };
 
-VoiceList.prototype.populate = function(){
+TextToSpeech.prototype.populate = function(){
   if(typeof speechSynthesis === "undefined") {
     return;
   }
   this.voices = speechSynthesis.getVoices();
-  console.log("this.voices", this.voices);
 }
 
-VoiceList.prototype.speakPhrase = function(phrase, speechLanguage){
+TextToSpeech.prototype.speakPhrase = function(phrase, speechLanguage){
   let speech = new SpeechSynthesisUtterance();
   speech.text = phrase;
   speech.lang = speechLanguage;
@@ -24,4 +22,4 @@ VoiceList.prototype.speakPhrase = function(phrase, speechLanguage){
   speechSynthesis.speak(speech);
 }
 
-module.exports = VoiceList;
+module.exports = TextToSpeech;
