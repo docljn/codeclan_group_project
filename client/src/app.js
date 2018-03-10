@@ -4,13 +4,14 @@ const phraseList = require("./models/phrase_list");
 const Request = require("./services/request");
 const WeatherDisplay = require("./models/weather_display");
 const LocationMap = require("./models/location_map");
+const TextToSpeech = require("./models/text_to_speech.js");
+const textToSpeech = new TextToSpeech();
 
 const app = function(){
-  let voices = [];
 
-  populateVoiceList();
+  textToSpeech.getVoices();
   if (typeof speechSynthesis !== "undefined" && speechSynthesis.onvoiceschanged !== undefined) {
-    speechSynthesis.onvoiceschanged = populateVoiceList;
+    speechSynthesis.onvoiceschanged = textToSpeech.populate;
   }
 
   const getCustomPhraseButton = document.querySelector("#submit_phrase");
@@ -18,18 +19,19 @@ const app = function(){
 
   const countriesSelectView = new CountriesSelectView(document.querySelector("#countries"));
 
-  const world = new CountryList("https://restcountries.eu/rest/v2/all?fields=name;languages;flag;capital;latlng;alpha2Code");
+  const countriesUrl = "https://restcountries.eu/rest/v2/all?fields=name;languages;flag;capital;latlng;alpha2Code";
+  const countryList = new CountryList(countriesUrl);
 
-  world.onUpdate = function(countries) {
+  countryList.onUpdate = function(countries) {
     countriesSelectView.render(countries);
   };
-  world.populate();
+  countryList.populate();
 
   countriesSelectView.onChange = function(country){
     const targetLanguageCode = country.languages[0].iso639_1;
 
     // find out where else that language is spoken:
-    const countriesWhereTargetIsSpoken = world.getCommonLanguage(targetLanguageCode);
+    const countriesWhereTargetIsSpoken = countryList.getCommonLanguage(targetLanguageCode);
 
     localStorage.setItem("targetLanguage", targetLanguageCode);
     const flag_src = country.flag;
@@ -64,10 +66,6 @@ const app = function(){
     // countryLocationMap.create("map", [mapCountryCode, 500], countryName);
 
     countryLocationMap.createCommonLanguageCountries("map",countriesWhereTargetIsSpoken);
-
-
-
-
 
   };
 };
@@ -109,7 +107,7 @@ const buildPhraseTable = function(country){
   homeLanguage.innerText = "English";
   const targetLanguage = document.getElementById("target_language");
   targetLanguage.innerText = country.languages[0].name;
-}
+};
 
 const clearPhraseTable = function(){
   const homeLanguage = document.getElementById("home_language");
@@ -117,7 +115,7 @@ const clearPhraseTable = function(){
   const targetLanguage = document.getElementById("target_language");
   targetLanguage.innerText = "";
 
-}
+};
 
 const createFlag = function(flagImage, countryName){
   const div = document.getElementById("flag_id");
@@ -130,27 +128,6 @@ const createFlag = function(flagImage, countryName){
 };
 
 
-
-
-function speakPhrase(phrase, speechLanguage) {
-  let msg = new SpeechSynthesisUtterance();
-  msg.text = phrase;
-  msg.lang = speechLanguage;
-
-  for(let i=0;i<voices.length;i++){
-    if(voices[i].lang==speechLanguage) {
-      msg.voice = voices[i];
-    }
-  }
-  speechSynthesis.speak(msg);
-}
-
-function populateVoiceList() {
-  if(typeof speechSynthesis === "undefined") {
-    return;
-  }
-  voices = speechSynthesis.getVoices();
-}
 
 const getCustomPhraseButtonClicked = function(){
   const phraseInput = document.getElementById("phrase_input");
@@ -171,7 +148,8 @@ const requestCompleteSinglePhrase = function(){
   const translatedPhrase = JSON.parse(jsonString).data;
   const originalPhrase = document.getElementById("phrase_input").value;
   const speechLanguage  = localStorage.getItem("speechLanguage");
-  speakPhrase(translatedPhrase, speechLanguage)
+
+  textToSpeech.speakPhrase(translatedPhrase, speechLanguage);
 
   savePhrasePair(originalPhrase, translatedPhrase);
 };
@@ -189,7 +167,6 @@ const savePhrasePair = function(originalPhrase, translatedPhrase){
 
 
 const appendTranslationPair = function(originalPhrase, translatedPhrase){
-  const speechLanguage = localStorage.getItem("speechLanguage");
   const languageCode = localStorage.getItem("targetLanguage");
 
   const tableBody = document.getElementById("phrase_table_body");
@@ -201,7 +178,7 @@ const appendTranslationPair = function(originalPhrase, translatedPhrase){
   const translatedPhraseTag = document.createElement("td");
 
   const speakButtonCell = document.createElement("td");
-  const speakButton = document.createElement("button")
+  const speakButton = document.createElement("button");
   speakButton.addEventListener("click", function() {
     speakButtonClicked(translatedPhrase);
   });
@@ -209,15 +186,15 @@ const appendTranslationPair = function(originalPhrase, translatedPhrase){
   speakButtonCell.appendChild(speakButton);
 
   const deleteButtonCell = document.createElement("td");
-  const deleteButton = document.createElement("button")
+  const deleteButton = document.createElement("button");
   deleteButton.addEventListener("click", function(){
     deleteButtonClicked(languageCode, translatedPhrase);
-  })
+  });
   deleteButton.innerText = "delete";
   deleteButtonCell.appendChild(deleteButton);
 
 
-  translatedPhraseTag.setAttribute('lang', languageCode);
+  translatedPhraseTag.setAttribute("lang", languageCode);
   translatedPhraseTag.innerText = translatedPhrase;
 
   tableRow.appendChild(originalPhraseTag);
@@ -234,7 +211,8 @@ const mongoRequestComplete = function(){
 
 const speakButtonClicked = function(translatedPhrase){
   const speechLanguage = localStorage.getItem("speechLanguage");
-  speakPhrase(translatedPhrase, speechLanguage)
+
+  textToSpeech.speakPhrase(translatedPhrase, speechLanguage);
   console.log("speak button speakButtonClicked");
 };
 
@@ -247,15 +225,5 @@ const deleteButtonClicked = function(languageCode, translatedPhrase){
   rowToRemove.innerHTML = "";
 };
 
-
-// I t doesn't look like this is used now.
-//  ripe for deletion!
-const getPhraseRequestComplete = function(allPhrases){
-  allPhrases.forEach(function(phrasePair){
-    const originalPhrase = phrasePair.originalPhrase;
-    const translatedPhrase = phrasePair.translatedPhrase;
-    appendTranslationPair(originalPhrase, translatedPhrase);
-  });
-};
 
 document.addEventListener("DOMContentLoaded", app);
