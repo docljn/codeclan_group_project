@@ -3,8 +3,8 @@
 }
 
 #weather-card {
-  border: solid black 2px;
-  border-radius: 9px;
+  border: solid lightgrey 1px;
+  border-radius: 4px;
   background-color: #9fd9ff;
   padding: 4px;
   text-align: center;

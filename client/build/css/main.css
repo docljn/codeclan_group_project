@@ -86,6 +86,7 @@ footer{
   width: 200px;
   border: solid lightgrey 1px;
   margin: 5%;
+  border-radius: 4px;
 }
 
 #banner{
