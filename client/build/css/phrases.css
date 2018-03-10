@@ -4,10 +4,7 @@
   text-align: left;
 }
 
-table, td, th{
-  border: 1px solid lightgrey;
-  display: flex hidden;
-}
+
 
 select{
   height: 2em;
@@ -15,12 +12,25 @@ select{
   font-family: 'Noto Sans', sans-serif;
 }
 
-thead{
+#phrase-table{
+  border: 1px solid lightgrey;
+  display: flex hidden;
+  border-radius: 4px;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+th,
+td{
   padding: 0.5em;
+  margin-right: 0.5em;
+  margin-top: 0.5em;
+}
+
+th{
   font-size: 1.5em;
   font-weight: bold;
 }
-
 
 #phrase-input{
   padding: 0.5em;
@@ -32,12 +42,6 @@ thead{
   border-radius: 4px;
   border: solid lightgrey 1px;
 
-#submit-phrase{
-  margin: 0 1em;
-}
-
-
-th,
-td{
-  padding: 0.5em;
-}
+  #submit-phrase{
+    margin: 0 1em;
+  }

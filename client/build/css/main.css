@@ -10,11 +10,6 @@ body{
   margin: 1em;
 }
 
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
-}
-
 h1{
   font-family: 'Indie Flower', cursive;
   font-size: 3em;
@@ -55,7 +50,9 @@ footer{
   bottom: 0;
 }
 
-
+div {
+  margin: 1em;
+}
 .page_header{
   margin: 5%;
   padding-top: 5%;
