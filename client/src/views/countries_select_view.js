@@ -2,7 +2,7 @@ const CountrySelectView = function(selectElement) {
   this.selectElement = selectElement;
   this.onChange = undefined;
   this.countries = [];
-  this.filteredCountries = [];
+  // this.filteredCountries = [];
   this.selectElement.addEventListener("change", function (e) {
     const target = e.target;
     const index = target.selectedIndex - 1;
