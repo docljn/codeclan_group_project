@@ -1,4 +1,5 @@
 const CountriesSelectView = require("./views/countries_select_view");
+const PhraseTableView = require("./views/phrase_table_view");
 const CountryList = require("./models/country_list");
 const phraseList = require("./models/phrase_list");
 const Request = require("./services/request");
@@ -6,6 +7,7 @@ const WeatherDisplay = require("./models/weather_display");
 const LocationMap = require("./models/location_map");
 const TextToSpeech = require("./models/text_to_speech.js");
 const textToSpeech = new TextToSpeech();
+const phraseTableView = new PhraseTableView(document.getElementById("phrase_table_body"));
 
 const app = function(){
 
@@ -48,12 +50,12 @@ const app = function(){
     const inputPhraseSection = document.getElementById("input-phrase-section");
     inputPhraseSection.hidden = false;
     if (targetLanguageCode != "en"){
-      buildPhraseTable(country);
+      phraseTableView.buildPhraseTable(country);
       // see if there is  db entry for this languageCode
       const requestURL = "http://localhost:3000/phrases/" + targetLanguageCode ;
       const mongoRequest = new Request(requestURL);
       mongoRequest.get(languagePresentRequestComplete);
-    } else clearPhraseTable();
+    } else phraseTableView.clearPhraseTable();
 
     createFlag(flag_src, countryName);
     const localWeatherDisplay = new WeatherDisplay();
@@ -84,7 +86,7 @@ const languagePresentRequestComplete = function(allPhrases){
     for (let i=0; i < allPhrases.length; i++){
       const originalPhrase = allPhrases[i].originalPhrase;
       const translatedPhrase = allPhrases[i].translatedPhrase;
-      appendTranslationPair (originalPhrase, translatedPhrase);
+      phraseTableView.appendTranslationPair (originalPhrase, translatedPhrase);
     }
   }
 };
@@ -102,20 +104,20 @@ const translateRequestComplete = function(){
   }
 };
 
-const buildPhraseTable = function(country){
-  const homeLanguage = document.getElementById("home_language");
-  homeLanguage.innerText = "English";
-  const targetLanguage = document.getElementById("target_language");
-  targetLanguage.innerText = country.languages[0].name;
-};
-
-const clearPhraseTable = function(){
-  const homeLanguage = document.getElementById("home_language");
-  homeLanguage.innerText = "";
-  const targetLanguage = document.getElementById("target_language");
-  targetLanguage.innerText = "";
-
-};
+// const buildPhraseTable = function(country){
+//   const homeLanguage = document.getElementById("home_language");
+//   homeLanguage.innerText = "English";
+//   const targetLanguage = document.getElementById("target_language");
+//   targetLanguage.innerText = country.languages[0].name;
+// };
+//
+// const clearPhraseTable = function(){
+//   const homeLanguage = document.getElementById("home_language");
+//   homeLanguage.innerText = "";
+//   const targetLanguage = document.getElementById("target_language");
+//   targetLanguage.innerText = "";
+//
+// };
 
 const createFlag = function(flagImage, countryName){
   const div = document.getElementById("flag_id");
@@ -162,48 +164,48 @@ const savePhrasePair = function(originalPhrase, translatedPhrase){
   const mongoRequest = new Request(requestURL);
   const bodyToSend = {originalPhrase: originalPhrase, translatedPhrase: translatedPhrase };
   mongoRequest.post(mongoRequestComplete, bodyToSend);
-  appendTranslationPair(originalPhrase, translatedPhrase);
+  phraseTableView.appendTranslationPair(originalPhrase, translatedPhrase);
 };
 
-
-const appendTranslationPair = function(originalPhrase, translatedPhrase){
-  const languageCode = localStorage.getItem("targetLanguage");
-
-  const tableBody = document.getElementById("phrase_table_body");
-
-  const tableRow = document.createElement("tr");
-  tableRow.setAttribute("id", translatedPhrase);
-  const originalPhraseTag = document.createElement("td");
-  originalPhraseTag.innerText = originalPhrase;
-  const translatedPhraseTag = document.createElement("td");
-
-  const speakButtonCell = document.createElement("td");
-  const speakButton = document.createElement("button");
-  speakButton.addEventListener("click", function() {
-    speakButtonClicked(translatedPhrase);
-  });
-  speakButton.innerText = "speak";
-  speakButtonCell.appendChild(speakButton);
-
-  const deleteButtonCell = document.createElement("td");
-  const deleteButton = document.createElement("button");
-  deleteButton.addEventListener("click", function(){
-    deleteButtonClicked(languageCode, translatedPhrase);
-  });
-  deleteButton.innerText = "delete";
-  deleteButtonCell.appendChild(deleteButton);
-
-
-  translatedPhraseTag.setAttribute("lang", languageCode);
-  translatedPhraseTag.innerText = translatedPhrase;
-
-  tableRow.appendChild(originalPhraseTag);
-  tableRow.appendChild(translatedPhraseTag);
-  tableRow.appendChild(speakButtonCell);
-  tableRow.appendChild(deleteButtonCell);
-  tableBody.appendChild(tableRow);
-
-};
+//
+// const appendTranslationPair = function(originalPhrase, translatedPhrase){
+//   const languageCode = localStorage.getItem("targetLanguage");
+//
+//   const tableBody = document.getElementById("phrase_table_body");
+//
+//   const tableRow = document.createElement("tr");
+//   tableRow.setAttribute("id", translatedPhrase);
+//   const originalPhraseTag = document.createElement("td");
+//   originalPhraseTag.innerText = originalPhrase;
+//   const translatedPhraseTag = document.createElement("td");
+//
+//   const speakButtonCell = document.createElement("td");
+//   const speakButton = document.createElement("button");
+//   speakButton.addEventListener("click", function() {
+//     speakButtonClicked(translatedPhrase);
+//   });
+//   speakButton.innerText = "speak";
+//   speakButtonCell.appendChild(speakButton);
+//
+//   const deleteButtonCell = document.createElement("td");
+//   const deleteButton = document.createElement("button");
+//   deleteButton.addEventListener("click", function(){
+//     deleteButtonClicked(languageCode, translatedPhrase);
+//   });
+//   deleteButton.innerText = "delete";
+//   deleteButtonCell.appendChild(deleteButton);
+//
+//
+//   translatedPhraseTag.setAttribute("lang", languageCode);
+//   translatedPhraseTag.innerText = translatedPhrase;
+//
+//   tableRow.appendChild(originalPhraseTag);
+//   tableRow.appendChild(translatedPhraseTag);
+//   tableRow.appendChild(speakButtonCell);
+//   tableRow.appendChild(deleteButtonCell);
+//   tableBody.appendChild(tableRow);
+//
+// };
 
 const mongoRequestComplete = function(){
   console.log("mongo post complete");
