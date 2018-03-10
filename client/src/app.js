@@ -14,7 +14,7 @@ const app = function(){
     speechSynthesis.onvoiceschanged = textToSpeech.populate;
   }
 
-  const getCustomPhraseButton = document.querySelector("#submit_phrase");
+  const getCustomPhraseButton = document.querySelector("#submit-phrase");
   getCustomPhraseButton.addEventListener("click", getCustomPhraseButtonClicked);
 
   const countriesSelectView = new CountriesSelectView(document.querySelector("#countries"));
@@ -62,10 +62,9 @@ const app = function(){
     const mapDiv = document.getElementById("map");
     mapDiv.hidden = false;
     const countryLocationMap = new LocationMap();
-    // const mapCountryCode = country_alpha2Code.toLowerCase();
-    // countryLocationMap.create("map", [mapCountryCode, 500], countryName);
 
-    countryLocationMap.createCommonLanguageCountries("map",countriesWhereTargetIsSpoken, speechLanguage);
+
+    countryLocationMap.createCommonLanguageCountries("map",countriesWhereTargetIsSpoken);
 
   };
 };
@@ -130,7 +129,7 @@ const createFlag = function(flagImage, countryName){
 
 
 const getCustomPhraseButtonClicked = function(){
-  const phraseInput = document.getElementById("phrase_input");
+  const phraseInput = document.getElementById("phrase-input");
   const phraseToTranslate = phraseInput.value;
   const languageCode = localStorage.getItem("targetLanguage");
 

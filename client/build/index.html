@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>TravelApp</title>
-    <link rel="stylesheet" type="text/css" href="css/main.css">
-    <link rel="stylesheet" type="text/css" href="css/phrases.css">
-    <link rel="stylesheet" type="text/css" href="css/weather.css">
-    <script src="bundle.js"></script>
+<head>
+  <meta charset="utf-8">
+  <title>TravelApp</title>
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+  <link rel="stylesheet" type="text/css" href="css/phrases.css">
+  <link rel="stylesheet" type="text/css" href="css/weather.css">
+  <script src="bundle.js"></script>
 
   <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
@@ -37,23 +37,23 @@
   <main>
 
 
+    <div class="flex flex-vertical">
 
-    <section class="select-and-flag">
-      <label for="countries" value="Country Select Dropdown"></label>
-      <select id="countries">
-        <option selected disabled>Select a destination country</option>
-      </select>
+      <section class="select-and-flag flex">
+        <label hidden for="countries" value="Country Select Dropdown">Select Destination</label>
+        <select id="countries">
+          <option selected disabled>Select a destination country</option>
+        </select>
+      </section>
 
 
-    </section>
-
-
-    <section id="input-phrase-section" hidden>
-      <label for="phrase input"></label>
-      <input name="phrase input" type="text" id="phrase_input" placeholder="Enter your custom phrase">
-      <label for="submit button"></label>
-      <button type="button" name="submitButton" id="submit_phrase">submit</button>
-    </section>
+      <section id="input-phrase-section" class="flex" hidden>
+        <label for="phrase input"></label>
+        <input name="phrase input" type="text" id="phrase-input" placeholder="Enter your custom phrase">
+        <label for="submit button"></label>
+        <button type="button" name="submitButton" id="submit-phrase">submit</button>
+      </section>
+    </div>
 
     <div class="phrases" id="phrases">
       <table class="phrase-table" id="phrase-table-id" hidden>

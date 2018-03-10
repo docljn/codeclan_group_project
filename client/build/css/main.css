@@ -2,6 +2,12 @@
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  font-size: 16px;
+}
+
+body{
+  font-family: 'Noto Sans', sans-serif;
+  margin: 1em;
 }
 
 table {
@@ -11,41 +17,39 @@ table {
 
 h1{
   font-family: 'Indie Flower', cursive;
-  font-size: 54px;
+  font-size: 3em;
   margin-bottom: 10px
-}
-
-body{
-  font-family: 'Noto Sans', sans-serif;
 }
 
 h2,h4{
   font-family: 'Indie Flower', cursive;
-  font-size: 20px;
-  margin-left: 12%;
-  margin-top: 10px;
+  font-size: 1.5em;
+  margin-left: 1em;
+  margin-top: 0.8em;
 }
 
 button{
   padding: 5px 20px;
-  font-size: 16px;
+  font-size: 1em;
   font-family: 'Noto Sans', sans-serif;
   cursor: pointer;
-  opacity: 0.6;
-  transition: 0.7s;
+  opacity: 1;
+  background-color: #83b8e7;
+  border-radius: 4px;
+  border: solid lightgrey 1px;
 }
 
 button:hover{
-  background-color: rgb(212, 237, 238);
-  opacity: 1;
+  background-color: lightgrey;
+  border: solid #83b8e7 2px;
 }
 
 footer{
   font-family: 'Noto Sans', sans-serif;
-  font-size: 10px;
-  padding-left: 20px;
+  font-size: 0.8em;
+  padding-left: 1em;
   position: fixed;
-  height: 60px;
+  height: 3em;
   background-color: rgb(100, 225, 255);
   width: 100%;
   bottom: 0;
@@ -60,20 +64,20 @@ footer{
 
 
 .flag{
-  margin-left: 5%;
-}
-
-.select-and-flag{
-  display: flex;
+  margin-left: 1em;
 }
 
 
 .flex {
   display: flex;
-  align-content: space-around;
-  justify-content: space-around;
+  align-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
   flex-wrap: wrap;
+}
+
+.flex-vertical{
+  flex-direction: column;
 }
 
 
