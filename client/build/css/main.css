@@ -50,7 +50,9 @@ footer{
   bottom: 0;
 }
 
-
+div {
+  margin: 1em;
+}
 .page_header{
   margin: 5%;
   padding-top: 5%;
