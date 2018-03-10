@@ -27,6 +27,10 @@ const app = function(){
 
   countriesSelectView.onChange = function(country){
     const targetLanguageCode = country.languages[0].iso639_1;
+
+    // find out where else that language is spoken:
+    const countriesWhereTargetIsSpoken = world.getCommonLanguage(targetLanguageCode);
+
     localStorage.setItem("targetLanguage", targetLanguageCode);
     const flag_src = country.flag;
     const countryName = country.name;
@@ -56,10 +60,15 @@ const app = function(){
     const mapDiv = document.getElementById("map");
     mapDiv.hidden = false;
     const countryLocationMap = new LocationMap();
-    const mapCountryCode = country_alpha2Code.toLowerCase();
-    countryLocationMap.create("map", mapCountryCode, countryName);
+    // const mapCountryCode = country_alpha2Code.toLowerCase();
+    // countryLocationMap.create("map", [mapCountryCode, 500], countryName);
 
-    // createWeatherDisplay(countryLatLng); // for alt weatherAPI
+    countryLocationMap.createCommonLanguageCountries("map",countriesWhereTargetIsSpoken);
+
+
+
+
+
   };
 };
 

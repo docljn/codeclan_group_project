@@ -30,4 +30,16 @@ CountryList.prototype.populate = function(){
   request.send(null);
 };
 
+CountryList.prototype.getCommonLanguage = function (languageCode) {
+  const newCountries = this.countries.filter( function (country) {
+    const spokenLanguages = country.languages.map( function (language) {
+      return language.iso639_1;
+    });
+    return spokenLanguages.includes(languageCode);
+  });
+  return newCountries;
+};
+
+
+
 module.exports = CountryList;
