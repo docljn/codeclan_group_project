@@ -7,7 +7,7 @@ const LocationMap = function () {
 };
 
 
-LocationMap.prototype.createCommonLanguageCountries = function (container, countriesWhereTargetIsSpokenArray){
+LocationMap.prototype.createCommonLanguageCountries = function (container, countriesWhereTargetIsSpokenArray, targetCountryCode){
   const countryCodeArray = countriesWhereTargetIsSpokenArray.map( function (country) {
     let countryCode = country.alpha2Code.toLowerCase();
     const requiredData = [countryCode, 500];
@@ -34,8 +34,8 @@ LocationMap.prototype.createCommonLanguageCountries = function (container, count
       enableMouseTracking: false,
       data:
         countryCodeArray
-
-    }]
+    }],
+    
   }
   ;
   const map = Highcharts.mapChart(container, mapDataObject);

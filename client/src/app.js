@@ -65,7 +65,7 @@ const app = function(){
     // const mapCountryCode = country_alpha2Code.toLowerCase();
     // countryLocationMap.create("map", [mapCountryCode, 500], countryName);
 
-    countryLocationMap.createCommonLanguageCountries("map",countriesWhereTargetIsSpoken);
+    countryLocationMap.createCommonLanguageCountries("map",countriesWhereTargetIsSpoken, speechLanguage);
 
   };
 };
