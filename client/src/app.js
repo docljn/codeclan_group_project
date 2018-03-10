@@ -11,7 +11,7 @@ const app = function(){
 
   textToSpeech.getVoices();
   if (typeof speechSynthesis !== "undefined" && speechSynthesis.onvoiceschanged !== undefined) {
-    speechSynthesis.onvoiceschanged = textToSpeech.populate;
+    speechSynthesis.onvoiceschanged = textToSpeech.getVoices;
   }
 
   const getCustomPhraseButton = document.querySelector("#submit-phrase");
