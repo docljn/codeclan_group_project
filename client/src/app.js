@@ -2,14 +2,14 @@ const CountriesSelectView = require("./views/countries_select_view");
 const CountryList = require("./models/country_list");
 const phraseList = require("./models/phrase_list");
 const Request = require("./services/request");
-const VoiceList = require("./models/voice_list.js");
-const voiceList = new VoiceList();
+const TextToSpeech = require("./models/text_to_speech.js");
+const textToSpeech = new TextToSpeech();
 
 const app = function(){
 
-  voiceList.populate();
+  textToSpeech.getVoices();
   if (typeof speechSynthesis !== "undefined" && speechSynthesis.onvoiceschanged !== undefined) {
-    speechSynthesis.onvoiceschanged = voiceList.populate;
+    speechSynthesis.onvoiceschanged = textToSpeech.populate;
   }
 
   const getCustomPhraseButton = document.querySelector("#submit_phrase");
@@ -206,7 +206,7 @@ const requestCompleteSinglePhrase = function(){
   const originalPhrase = document.getElementById("phrase_input").value;
   const speechLanguage  = localStorage.getItem("speechLanguage");
 
-  voiceList.speakPhrase(translatedPhrase, speechLanguage);
+  textToSpeech.speakPhrase(translatedPhrase, speechLanguage);
 
   savePhrasePair(originalPhrase, translatedPhrase);
 };
@@ -270,7 +270,7 @@ const mongoRequestComplete = function(){
 const speakButtonClicked = function(translatedPhrase){
   const speechLanguage = localStorage.getItem("speechLanguage");
 
-  voiceList.speakPhrase(translatedPhrase, speechLanguage);
+  textToSpeech.speakPhrase(translatedPhrase, speechLanguage);
   console.log("speak button speakButtonClicked");
 };
 

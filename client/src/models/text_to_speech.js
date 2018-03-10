@@ -2,7 +2,7 @@ const TextToSpeech = function(){
   this.voices = [];
 };
 
-TextToSpeech.prototype.populate = function(){
+TextToSpeech.prototype.getVoices = function(){
   if(typeof speechSynthesis === "undefined") {
     return;
   }
@@ -16,7 +16,6 @@ TextToSpeech.prototype.speakPhrase = function(phrase, speechLanguage){
 
   if (this.voices.includes(speechLanguage)){
       speech.voice = speechLanguage;
-      console.log("speech.voice", speech.voice);
   }
 
   speechSynthesis.speak(speech);
