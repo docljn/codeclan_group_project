@@ -63,10 +63,6 @@ footer{
 }
 
 
-.flag{
-  margin-left: 1em;
-}
-
 
 .flex {
   display: flex;
@@ -89,7 +85,6 @@ footer{
 #flag_image{
   width: 200px;
   border: solid lightgrey 1px;
-  margin: 5%;
   border-radius: 4px;
 }
 

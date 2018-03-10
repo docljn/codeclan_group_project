@@ -42,6 +42,7 @@ const buildWeatherHtml = function (weatherObject) {
   const htmlDegrees = "℃";
 
   weatherDiv.innerHTML = "";
+  weatherDiv.hidden = false;
 
   // make html elements needed
   const weatherCard = document.createElement("div");
