@@ -8,11 +8,12 @@ const TextToSpeech = require("./models/text_to_speech.js");
 const textToSpeech = new TextToSpeech();
 
 const app = function(){
-
-  textToSpeech.getVoices();
-  if (typeof speechSynthesis !== "undefined" && speechSynthesis.onvoiceschanged !== undefined) {
-    speechSynthesis.onvoiceschanged = textToSpeech.getVoices;
-  }
+  // ** potentially no longer need 5 lines below to getVoices here - needs further investigation 
+  // textToSpeech.getVoices();
+  // if (typeof speechSynthesis !== "undefined" && speechSynthesis.onvoiceschanged !== undefined) {
+  //   speechSynthesis.onvoiceschanged = textToSpeech.getVoices;
+  // }
+  // **
 
   const getCustomPhraseButton = document.querySelector("#submit-phrase");
   getCustomPhraseButton.addEventListener("click", getCustomPhraseButtonClicked);
