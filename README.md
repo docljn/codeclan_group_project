@@ -82,3 +82,23 @@ Some samples of existing apps for inspiration:
 ![Translation to Spanish / Spain Info](./images/spain.png)
 
 ![Translation to Khmer / Cambodia Info](./images/cambodia.png)
+
+## Installation
+
+- clone the repository
+- cd into the new directory
+- npm install
+
+### To actually start the app
+
+- In your terminal: one tab per process all run from the root directory of the project i.e. where server.js is found
+
+```
+> npm run webpack (builds bundle.js files)
+> mongod (starts database).
+> mongo (opens database)
+> nodemon server.js (start server to run at local host)
+```
+
+- **NB** closing the terminal does not stop the processes
+- if you get an error when running any of those commands, check the Activity Monitor and kill any process that shouldn't be running
