@@ -53,25 +53,6 @@ Some samples of existing apps for inspiration:
 - Local timezones
 
 
-## APIs
-
-#### Country language API
--  https://www.npmjs.com/package/country-language
-
-#### Google Translate
-- https://www.npmjs.com/package/google-translate-api
-
-#### Something with country/language links
-
-#### Potentially Google Maps or HighCharts Maps
-- something where a user could click on a country to select it and/or get information?
-- a map with the chosen country highlighted?
-
-#### Text to Speech
-
-## Reference
-- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
-- https://developers.google.com/web/fundamentals/primers/promises
 
 # Result - traveLingo
 
@@ -88,16 +69,31 @@ Some samples of existing apps for inspiration:
 - clone the repository
 - cd into the new directory
 - npm install
+- sign up and request an API key from http://openweathermap.org/api
+- inside your app, create the file ./client/resources/openweatherAPI.js
+- add the following code:
+
+```JavaScript
+
+const openweatherAPI = {
+  url: "api.openweathermap.org/data/2.5/weather?",
+  key: "your_API_key_here"
+}
+
+module.exports = openweatherAPI;
+```
 
 ### To actually start the app
 
-- In your terminal: one tab per process all run from the root directory of the project i.e. where server.js is found
+- In your terminal: one tab per process, all run from the root directory of the project i.e. where server.js is found
 
-```
+```bash
 > npm run webpack (builds bundle.js files)
-> mongod (starts database).
+> mongod (starts database)
 > mongo (opens database)
-> nodemon server.js (start server to run at local host)
+> npm start
+(a script to start the nodejs server using nodemon,
+server listening on localhost:3000)
 ```
 
 - **NB** closing the terminal does not stop the processes
