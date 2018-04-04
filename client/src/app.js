@@ -37,7 +37,6 @@ const app = function(){
     const flag_src = country.flag;
     const countryName = country.name;
     const countryCapital = country.capital;
-    // const countryLatLng = country.latlng; // needed for local weather alternate api
     const country_alpha2Code = country.alpha2Code;
     const speechLanguage =  targetLanguageCode + "-" + country_alpha2Code;
     localStorage.setItem("speechLanguage", speechLanguage);
@@ -139,6 +138,8 @@ const getCustomPhraseButtonClicked = function(){
   requestPhrase.onload = requestCompleteSinglePhrase;
   const requestBody = {language: languageCode, phrase: phraseToTranslate};
   requestPhrase.send(JSON.stringify(requestBody));
+  // NB: ADDED
+  event.preventDefault();
 };
 
 const requestCompleteSinglePhrase = function(){
