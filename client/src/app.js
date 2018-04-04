@@ -138,8 +138,7 @@ const getCustomPhraseButtonClicked = function(){
   requestPhrase.onload = requestCompleteSinglePhrase;
   const requestBody = {language: languageCode, phrase: phraseToTranslate};
   requestPhrase.send(JSON.stringify(requestBody));
-  // NB: ADDED
-  event.preventDefault();
+  event.preventDefault(); // ensures that the standard form action on button click does not get called
 };
 
 const requestCompleteSinglePhrase = function(){
