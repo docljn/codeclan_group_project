@@ -7,10 +7,16 @@ const LocationMap = function () {
 };
 
 
-LocationMap.prototype.createCommonLanguageCountries = function (container, countriesWhereTargetIsSpokenArray){
+LocationMap.prototype.createCommonLanguageCountries = function (container, countriesWhereTargetIsSpokenArray, selectedCountry){
   const countryCodeArray = countriesWhereTargetIsSpokenArray.map( function (country) {
+    let selectedCountryCode = selectedCountry.alpha2Code.toLowerCase()
     let countryCode = country.alpha2Code.toLowerCase();
-    const requiredData = [countryCode, 500];
+    let requiredData = [];
+    if (countryCode === selectedCountryCode){
+      requiredData = [countryCode, 40];
+    } else {
+      requiredData = [countryCode, 20];
+    }
     return requiredData;
   });
   const mapDataObject =
@@ -30,14 +36,19 @@ LocationMap.prototype.createCommonLanguageCountries = function (container, count
       enabled: false
     },
 
+    colorAxis: {
+            min: 0,
+            max: 50,
+            type: 'linear'
+    },
+
     series: [{
       enableMouseTracking: false,
       data:
-        countryCodeArray
+      countryCodeArray
     }],
 
-  }
-  ;
+  };
   const map = Highcharts.mapChart(container, mapDataObject);
   this.map = map;
 };

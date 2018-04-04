@@ -62,11 +62,14 @@ const app = function(){
     mapDiv.hidden = false;
     const countryLocationMap = new LocationMap();
 
-
-    countryLocationMap.createCommonLanguageCountries("map",countriesWhereTargetIsSpoken);
+    countryLocationMap.createCommonLanguageCountries("map",countriesWhereTargetIsSpoken, country);
 
   };
 };
+
+
+
+
 
 const languagePresentRequestComplete = function(allPhrases){
 
