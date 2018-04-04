@@ -212,7 +212,6 @@ const speakButtonClicked = function(translatedPhrase){
   const speechLanguage = localStorage.getItem("speechLanguage");
 
   textToSpeech.speakPhrase(translatedPhrase, speechLanguage);
-  console.log("speak button speakButtonClicked");
 };
 
 const deleteButtonClicked = function(languageCode, translatedPhrase){

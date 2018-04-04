@@ -34,15 +34,12 @@ app.post("/translate_api/", function (req, expressResponse) {
 
 app.post("/translate_api/single_phrase/", function (req, expressResponse) {
 
-  console.log("Finding the single_phrase route");
 
   const languageToTranslateTo = req.body.language;
   const bodyPhrase = req.body.phrase;
-  console.log("bodyPhrase", bodyPhrase);
 
   translate(bodyPhrase, {from: "en", to: languageToTranslateTo}).then(translateResponse => {
       const aPhrase = translateResponse.text;
-      console.log(aPhrase);
       expressResponse.json({data: aPhrase});
 
     }).catch(err => {
@@ -55,5 +52,5 @@ app.use(express.static("client/build"));
 app.use(require(__dirname + "/controllers/phrases_controller"))
 
 const server = app.listen(3000, function () {
-  console.log("TravelApp listening at " + this.address().port);
+  console.log("traveLingo listening at " + this.address().port);
 });
