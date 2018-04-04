@@ -42,7 +42,7 @@ const app = function(){
     localStorage.setItem("speechLanguage", speechLanguage);
     const phraseTable = document.getElementById("phrase-table-id");
     phraseTable.hidden = false;
-    const tableBody = document.getElementById("phrase_table_body");
+    const tableBody = document.getElementById("phrase-table-body");
     tableBody.innerText = "";
     const inputPhraseSection = document.getElementById("input-phrase-section");
     inputPhraseSection.hidden = false;
@@ -101,26 +101,26 @@ const translateRequestComplete = function(){
 };
 
 const buildPhraseTable = function(country){
-  const homeLanguage = document.getElementById("home_language");
+  const homeLanguage = document.getElementById("home-language");
   homeLanguage.innerText = "English";
-  const targetLanguage = document.getElementById("target_language");
+  const targetLanguage = document.getElementById("target-language");
   targetLanguage.innerText = country.languages[0].name;
 };
 
 const clearPhraseTable = function(){
-  const homeLanguage = document.getElementById("home_language");
+  const homeLanguage = document.getElementById("home-language");
   homeLanguage.innerText = "";
-  const targetLanguage = document.getElementById("target_language");
+  const targetLanguage = document.getElementById("target-language");
   targetLanguage.innerText = "";
 
 };
 
 const createFlag = function(flagImage, countryName){
-  const div = document.getElementById("flag_id");
+  const div = document.getElementById("flag-id");
   div.innerHTML = "";
   const img = document.createElement("img");
   img.src = flagImage;
-  img.id = "flag_image";
+  img.id = "flag-image";
   img.alt = "Flag of " + countryName;
   div.appendChild(img);
 };
@@ -168,7 +168,7 @@ const savePhrasePair = function(originalPhrase, translatedPhrase){
 const appendTranslationPair = function(originalPhrase, translatedPhrase){
   const languageCode = localStorage.getItem("targetLanguage");
 
-  const tableBody = document.getElementById("phrase_table_body");
+  const tableBody = document.getElementById("phrase-table-body");
 
   const tableRow = document.createElement("tr");
   tableRow.setAttribute("id", translatedPhrase);

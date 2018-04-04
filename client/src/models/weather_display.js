@@ -52,7 +52,7 @@ const buildWeatherHtml = function (weatherObject) {
 
   const icon = document.createElement("img");
   icon.src = weatherIconSource;
-  icon.id = "weather_icon";
+  icon.id = "weather-icon";
 
   const temp = document.createElement("p");
   temp.innerText = currentTemperature + htmlDegrees + ": " + weatherDescription;
