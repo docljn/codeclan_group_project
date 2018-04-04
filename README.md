@@ -76,7 +76,7 @@ Some samples of existing apps for inspiration:
 ```JavaScript
 
 const openweatherAPI = {
-  url: "api.openweathermap.org/data/2.5/weather?",
+  url: "http://api.openweathermap.org/data/2.5/weather?",
   key: "your_API_key_here"
 }
 
