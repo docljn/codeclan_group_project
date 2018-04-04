@@ -4,7 +4,7 @@ const MongoClient = require("mongodb").MongoClient;
 const url = "mongodb://localhost:27017/travel_lingo";
 
 MongoClient.connect(url, function(err, client){
-  // console.log("error log", err);
+  console.log("error log:", err);
   const db = client.db("travel_lingo");
 
   // Gets all phrases for the language code
@@ -12,16 +12,12 @@ MongoClient.connect(url, function(err, client){
     const languageCode = req.params.languageCode;
     const collection = db.collection(languageCode);
     collection.find({}).toArray(function(err, docs){
-      console.log("docs", docs);
       res.json(docs);
     })
   })
 
   // Create one phrase for language code
   phrasesRouter.post("/phrases/:languageCode", function(req, res){
-    // console.log("req lang code in post", req.params.languageCode);
-    // console.log("req body translated phrase", req.body.translatedPhrase);
-    // console.log("req body original phrase", req.body.originalPhrase);
     const languageCode = req.params.languageCode;
     const collection = db.collection(languageCode);
     collection.insert({originalPhrase: req.body.originalPhrase, translatedPhrase: req.body.translatedPhrase});
@@ -53,33 +49,3 @@ MongoClient.connect(url, function(err, client){
 })
 
 module.exports = phrasesRouter;
-
-
-
-//
-// const express = require('express');
-// const countriesRouter = express.Router();
-// const MongoClient = require('mongodb').MongoClient;
-// const url = 'mongodb://localhost:27017';
-//
-// MongoClient.connect(url, function(err, client){
-//   const db = client.db('bucket_list_app');
-//
-//   countriesRouter.get('/bucketList', function(req, res) {
-//     const collection = db.collection('bucket_countries');
-//     collection.find({}).toArray(function(err, docs) {
-//       res.json(docs);
-//     })
-//   })
-//
-//   countriesRouter.post('/bucketList', function(req, res) {
-//     const collection = db.collection('bucket_countries');
-//     collection.insert(req.body.country);
-//     res.status(200);
-//     res.send();
-//   })
-//
-// })
-//
-//
-// module.exports = countriesRouter;
